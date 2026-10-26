@@ -1,0 +1,70 @@
+﻿@if (diagrama().pessoas.length === 0) {
+  <div class="empty">
+    <span class="family-mark" aria-hidden="true">♧</span>
+    <p class="eyebrow">CADA CONEXÃO CONTA UMA HISTÓRIA</p>
+    <h3>Espaço para a sua família</h3>
+    <p>Adicione uma pessoa para começar a visualizar o genograma.</p>
+    <span class="empty-note">Nenhuma pessoa adicionada</span>
+  </div>
+} @else {
+  <div class="tools" aria-label="Controles do diagrama">
+    <span>{{ diagrama().pessoas.length }} pessoa(s) · {{ diagrama().conexoes.length }} vínculo(s)</span>
+    <div>
+      <button type="button" aria-label="Diminuir zoom" (click)="alterarZoom(-10)" [disabled]="zoom() === 50">−</button>
+      <output aria-live="polite" aria-label="Zoom">{{ zoom() }}%</output>
+      <button type="button" aria-label="Aumentar zoom" (click)="alterarZoom(10)" [disabled]="zoom() === 150">+</button>
+      <button type="button" (click)="zoom.set(100)">Restaurar</button>
+    </div>
+  </div>
+  <div class="viewport" tabindex="0" role="region" aria-label="Diagrama com rolagem. Use as setas para navegar." aria-describedby="diagrama-ajuda">
+    <svg [attr.viewBox]="'0 0 ' + diagrama().largura + ' ' + diagrama().altura"
+      [attr.width]="diagrama().largura * zoom() / 100" [attr.height]="diagrama().altura * zoom() / 100"
+      role="img" [attr.aria-label]="'Genograma com ' + diagrama().pessoas.length + ' pessoas e ' + diagrama().conexoes.length + ' vínculos. Consulte também a descrição textual abaixo.'">
+      <defs>
+        <marker id="seta-filiacao" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#326e58" />
+        </marker>
+      </defs>
+      @for (conexao of diagrama().conexoes; track conexao.vinculo.id) {
+        <path class="connection" [class.union]="conexao.vinculo.tipo === 'uniao'" [attr.d]="conexao.caminho"
+          [attr.marker-end]="conexao.vinculo.tipo === 'filiacao' ? 'url(#seta-filiacao)' : null">
+          <title>{{ conexao.descricao }}</title>
+        </path>
+      }
+      @for (no of diagrama().pessoas; track no.pessoa.id) {
+        <g class="person" [attr.transform]="'translate(' + no.x + ',' + no.y + ')'" [attr.data-pessoa-id]="no.pessoa.id">
+          <title>{{ no.pessoa.nome }}{{ no.pessoa.falecida ? ' — pessoa falecida' : '' }}{{ no.pessoa.nascimento ? ' — nascimento: ' + no.pessoa.nascimento : '' }}</title>
+          <rect width="160" height="100" rx="10" />
+          @for (linha of no.linhasNome; track $index) {
+            <text x="12" [attr.y]="24 + $index * 17" class="name">{{ linha }}</text>
+          }
+          <text x="12" y="64" class="detail">{{ no.pessoa.nascimento ? 'Nasc. ' + no.pessoa.nascimento.split('-').reverse().join('/') : 'Nascimento não informado' }}</text>
+          <text x="12" y="84" class="detail">{{ no.pessoa.falecida ? '† Pessoa falecida' : 'Pessoa' }} · {{ no.pessoa.id.slice(0, 8) }}</text>
+        </g>
+      }
+    </svg>
+  </div>
+  <p id="diagrama-ajuda" class="help">Use a rolagem para explorar o diagrama e os botões para ajustar o zoom.</p>
+}
+<div class="legend" aria-label="Legenda do genograma">
+  <span><i class="card-symbol" aria-hidden="true"></i> Pessoa</span>
+  <span><i class="line-symbol" aria-hidden="true">→</i> Filiação: responsável → descendente</span>
+  <span><i class="union-symbol" aria-hidden="true"></i> União</span>
+  <span><b aria-hidden="true">†</b> Pessoa falecida</span>
+</div>
+@if (diagrama().pessoas.length > 0) {
+  <details>
+    <summary>Descrição textual do genograma</summary>
+    <h3>Pessoas</h3>
+    <ul>
+      @for (no of diagrama().pessoas; track no.pessoa.id) {
+        <li>{{ no.pessoa.nome }} · {{ no.pessoa.id.slice(0, 8) }}{{ no.pessoa.falecida ? ' — pessoa falecida' : '' }}{{ no.pessoa.nascimento ? ' — nascimento: ' + no.pessoa.nascimento.split('-').reverse().join('/') : '' }}</li>
+      }
+    </ul>
+    <h3>Vínculos</h3>
+    <ul>
+      @for (conexao of diagrama().conexoes; track conexao.vinculo.id) { <li>{{ conexao.descricao }}</li> }
+      @empty { <li>Nenhum vínculo cadastrado.</li> }
+    </ul>
+  </details>
+}

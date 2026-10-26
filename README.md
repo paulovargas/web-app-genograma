@@ -6,7 +6,13 @@ Aplicação Angular para construir e visualizar pessoas e vínculos familiares e
 
 Angular 19, TypeScript, CSS, Jasmine e Karma. Editor com cadastro, edição e remoção de pessoas e vínculos de união e filiação. Os vínculos validam duplicatas e ciclos de ancestralidade.
 
-A persistência usa MockAPI com salvamento manual de cada genograma completo. Diagrama ainda não implementado.
+A persistência usa MockAPI com salvamento manual de cada genograma completo. Diagrama SVG implementado com organização por gerações, legenda, zoom e descrição textual acessível.
+
+## Visualizar o genograma
+
+Pessoas e vínculos aparecem automaticamente no diagrama. Filiações usam setas e uniões usam linhas tracejadas. Ajuste o zoom ou use a rolagem para explorar famílias maiores. A descrição textual abaixo do diagrama apresenta os nomes completos e as conexões.
+
+Os cartões usam símbolos neutros. Consulte a [decisão sobre o diagrama](docs/decisoes/001-diagrama-svg.md) para conhecer a convenção visual e as limitações.
 
 ## Salvar e reabrir
 

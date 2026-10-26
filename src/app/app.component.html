@@ -20,25 +20,14 @@
   <app-persistencia #persistencia (ocupadoChange)="ocupado.set($event)" />
   <fieldset class="editor-controls" [disabled]="ocupado()"><legend class="sr-only">Editor do genograma</legend>
   <div class="workspace">
-    <aside class="sidebar" aria-label="Cadastro de pessoas"><app-pessoas #cadastro /></aside>
+    <aside class="sidebar" aria-label="Cadastro de pessoas"><app-pessoas /></aside>
 
     <section id="editor" class="editor" aria-labelledby="editor-title" tabindex="-1">
       <div class="editor-toolbar">
         <div><h2 id="editor-title">{{ persistencia.tituloAtual() }}</h2></div>
         <span class="canvas-label">Área de construção</span>
       </div>
-      <div class="canvas">
-        <div class="canvas-empty">
-          <div class="family-mark" aria-hidden="true">
-            ♧
-          </div>
-          <p class="eyebrow">CADA CONEXÃO CONTA UMA HISTÓRIA</p>
-          <h3>Espaço para a sua família</h3>
-          <p>Seu genograma ganhará forma aqui, com as pessoas e os vínculos que você construir.</p>
-          <span class="empty-note">{{ cadastro.pessoas().length === 0 ? 'Nenhuma pessoa adicionada' : cadastro.pessoas().length + ' pessoa(s) cadastrada(s)' }}</span>
-        </div>
-
-      </div>
+      <app-diagrama />
     </section>
   </div>
 

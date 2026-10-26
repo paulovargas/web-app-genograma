@@ -18,7 +18,7 @@ O escopo abaixo é uma proposta inicial, que pode ser refinada antes de cada eta
 | 06 | Persistência na API (antecipada) | Salvar e recuperar genogramas completos; tratar espera, erros, descarte e respostas inválidas | `feat: integra persistencia de genogramas com mockapi` |
 | 07 | Revisão do fluxo | Validar fluxo completo, teclado, responsividade e mensagens; documentar uso e limitações | `docs: documenta primeiro fluxo completo` |
 
-Situação: etapas 01 a 04 implementadas; etapa 06 antecipada e implementada com MockAPI. Etapas 05 e 07 pendentes. Suíte automatizada aprovada; conferência visual em desktop e celular pendente.
+Situação: etapas 01 a 04 implementadas; etapa 06 antecipada e implementada com MockAPI. Etapa 05 implementada; etapa 07 pendente. Suíte automatizada aprovada; diagrama conferido em desktop e celular de 390 px.
 
 ## Modelo inicial proposto
 
@@ -150,3 +150,17 @@ Validação: build sem avisos; compilação TypeScript dos testes aprovada; 24 t
 Detalhes em [persistência pela API](persistencia-api.md).
 
 Commit sugerido: `feat: integra persistencia de genogramas com mockapi`.
+
+## Entrega da etapa 05 — 26/10/2026
+
+- Diagrama SVG conectado ao estado compartilhado: cadastro, edição, exclusão e abertura pela API refletem na visualização.
+- Organização automática por gerações usando os vínculos de filiação.
+- Cartões neutros com nome, nascimento opcional e indicação de falecimento.
+- União tracejada e filiação com seta, acompanhadas de legenda.
+- Zoom de 50% a 150%, restauração da escala e área de rolagem com acesso por teclado.
+- Descrição textual expansível para consultar pessoas e conexões com nomes completos.
+- Escolha e limitações registradas na [decisão 001](decisoes/001-diagrama-svg.md).
+
+Validação: build de produção sem avisos; 31 testes passaram no ChromeHeadless. Conferência visual no Chrome em desktop e viewport de 390 × 844 com pessoas fictícias, união e filiação. No celular, a largura do documento permaneceu em 390 px e a rolagem horizontal ficou contida na área do diagrama. Zoom de 50% conferido. Os dados fictícios dessa conferência ficaram apenas no editor, sem gravação na API.
+
+Commit sugerido: `feat: adiciona visualizacao do genograma`.

@@ -1,4 +1,5 @@
-﻿import { Component, signal } from '@angular/core';
+﻿import { DiagramaComponent } from './diagrama/diagrama.component';
+import { Component, signal } from '@angular/core';
 import { PersistenciaComponent } from './persistencia/persistencia.component';
 import { VinculosComponent } from './vinculos/vinculos.component';
 import { PessoasComponent } from './pessoas/pessoas.component';
@@ -6,7 +7,7 @@ import { PessoasComponent } from './pessoas/pessoas.component';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [PessoasComponent, VinculosComponent, PersistenciaComponent],
+  imports: [DiagramaComponent, PessoasComponent, VinculosComponent, PersistenciaComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
