@@ -4,7 +4,7 @@ Aplicação Angular para construir e visualizar pessoas e vínculos familiares e
 
 ## Estado atual
 
-Estrutura inicial do Angular 19, com TypeScript, CSS, Jasmine e Karma. Funcionalidades do genograma ainda não implementadas. Backend e tecnologia do diagrama ainda não definidos.
+Estrutura inicial do Angular 19, com TypeScript, CSS, Jasmine e Karma. Estrutura visual do editor implementada, com lista de pessoas e área do genograma em estado vazio. Cadastro, vínculos e persistência ainda não implementados. Backend e tecnologia do diagrama ainda não definidos.
 
 ## Executar
 

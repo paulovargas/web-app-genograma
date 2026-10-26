@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+﻿import { TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
@@ -8,22 +8,15 @@ describe('AppComponent', () => {
     }).compileComponents();
   });
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
-
-  it(`should have the 'web-app-genograma' title`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('web-app-genograma');
-  });
-
-  it('should render title', () => {
+  it('deve apresentar o editor vazio e orientar sobre o cadastro de pessoas', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, web-app-genograma');
+    const element = fixture.nativeElement as HTMLElement;
+
+    expect(element.querySelector('#editor-title')?.textContent).toContain('Genograma sem título');
+    expect(element.textContent).toContain('Nenhuma pessoa adicionada');
+    expect(element.textContent).toContain('Cadastro de pessoas');
+    expect(element.querySelector('.skip-link')?.getAttribute('href')).toBe('#editor');
+    expect(element.querySelector('#editor')).not.toBeNull();
   });
 });

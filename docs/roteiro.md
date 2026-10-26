@@ -18,7 +18,7 @@ O escopo abaixo é uma proposta inicial, que pode ser refinada antes de cada eta
 | 06 | Persistência | Salvar localmente e recuperar após recarregar; tratar dados inválidos e falha de armazenamento | `feat: adiciona persistencia local` |
 | 07 | Revisão do fluxo | Validar fluxo completo, teclado, responsividade e mensagens; documentar uso e limitações | `docs: documenta primeiro fluxo completo` |
 
-Situação: documentação da etapa 01 preparada; etapas 02 a 07 pendentes.
+Situação: etapa 01 documentada; etapa 02 implementada, com validação visual e execução dos testes pendentes; etapas 03 a 07 pendentes.
 
 ## Modelo inicial proposto
 
@@ -73,3 +73,22 @@ Executar o build quando houver alterações na aplicação. Testar comportamento
 Preservar a configuração Angular existente e usar componentes standalone. Organizar por funcionalidade conforme o projeto crescer, separando modelos, apresentação e serviços. Evitar camadas vazias antecipadas.
 
 Registrar decisões arquiteturais relevantes em `docs/decisoes/` quando forem tomadas, incluindo contexto, escolha, motivo e limitações. A escolha da tecnologia de diagrama pertence à etapa 05.
+
+## Entrega da etapa 02 — 26/10/2026
+
+- Tela padrão do Angular substituída pela estrutura inicial do editor.
+- Lista de pessoas vazia, área do genograma e orientações iniciais em português.
+- Layout com adaptações para telas de até 640px e 1000px.
+- Link para pular ao editor, títulos semânticos e idioma `pt-BR`.
+- Cadastro, vínculos, renderização do diagrama e persistência permanecem nas próximas etapas.
+- Teste padrão atualizado para verificar o estado vazio e o acesso ao editor.
+
+Validação executada:
+
+- `npm.cmd run build`: passou sem avisos.
+- `npm.cmd test -- --watch=false --browsers=ChromeHeadless`: compilou a suíte, mas o Chrome falhou na inicialização da GPU; nenhum resultado de teste confirmado.
+- `git diff --check`: executado após a revisão dos arquivos.
+
+Pendências de validação: executar a suíte em ambiente com ChromeHeadless funcional e conferir a tela no navegador em desktop e celular. As adaptações responsivas foram implementadas, mas ainda não verificadas visualmente.
+
+No PowerShell deste ambiente, foi necessário usar `npm.cmd`, pois a política de execução bloqueia `npm.ps1`.
