@@ -76,4 +76,24 @@ describe('GenogramaService', () => {
     expect(service.alterarSituacaoUniao('inexistente', 'divorciados')).not.toBeNull();
     expect(service.vinculos()).toEqual([]);
   });
+  it('deve validar ciclos misturando filiação, adoção e acolhimento e impedir duplicatas', () => {
+    expect(service.adicionarVinculo('filiacao', 'a', 'b', undefined, 'adocao')).toBeNull();
+    expect(service.adicionarVinculo('filiacao', 'b', 'c', undefined, 'acolhimento')).toBeNull();
+    expect(service.adicionarVinculo('filiacao', 'c', 'a')).toContain('ciclo');
+    expect(service.adicionarVinculo('filiacao', 'a', 'b', undefined, 'acolhimento')).toContain('já foi cadastrado');
+    expect(service.vinculos().length).toBe(2);
+  });
+
+  it('deve alterar a modalidade preservando identificador e pessoas e rejeitar modalidade em união', () => {
+    service.adicionarVinculo('filiacao', 'a', 'b');
+    const id = service.vinculos()[0].id;
+    expect(service.alterarModalidadeFiliacao(id, 'adocao')).toBeNull();
+    expect(service.vinculos()[0].id).toBe(id);
+    expect(service.vinculos()[0].modalidade).toBe('adocao');
+    expect(service.alterarModalidadeFiliacao(id, 'acolhimento')).toBeNull();
+    expect(service.vinculos()[0].origemId).toBe('a');
+    expect(service.vinculos()[0].destinoId).toBe('b');
+    expect(service.adicionarVinculo('uniao', 'c', 'd', undefined, 'adocao')).not.toBeNull();
+    expect(service.alterarModalidadeFiliacao('inexistente', 'adocao')).not.toBeNull();
+  });
 });

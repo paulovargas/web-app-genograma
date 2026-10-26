@@ -59,3 +59,14 @@ No cadastro ou na edição de uma pessoa, escolha o **Símbolo da pessoa**: neut
 Ao adicionar uma união, escolha a **Situação conjugal**. Separação aparece com um traço diagonal e divórcio com dois traços na linha da união. Para mudar uma união existente, use **Alterar situação conjugal** na lista de vínculos. Não é necessário remover o vínculo nem as pessoas.
 
 Clique em **Salvar genograma** para guardar essas escolhas na API. Registros antigos sem os campos novos continuam abrindo normalmente. O app registra uma situação atual por par de pessoas, sem histórico ou datas de mudança.
+
+## Adoção e acolhimento (etapa 09)
+
+1. Em **Tipo de vínculo**, escolha **Filiação ou cuidado**.
+2. Selecione o responsável e a pessoa vinculada.
+3. Em **Modalidade do vínculo**, escolha **Filiação não especificada**, **Adoção** ou **Acolhimento**.
+4. Clique em **Adicionar vínculo**. Adoção aparece como seta tracejada e acolhimento como seta pontilhada.
+5. Para corrigir um vínculo existente, use **Alterar modalidade** na lista.
+6. Clique em **Salvar genograma** para gravar na API.
+
+O acolhimento é apresentado como vínculo de cuidado. Vínculos antigos continuam não especificados, sem inferência de origem biológica. A descrição textual também informa a modalidade. Veja a [decisão sobre adoção e acolhimento](decisoes/003-adocao-e-acolhimento.md).

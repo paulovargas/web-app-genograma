@@ -1,5 +1,5 @@
 ﻿import { Pessoa } from '../pessoas/pessoa.model';
-import { ROTULOS_CONJUGAIS, Vinculo } from '../vinculos/vinculo.model';
+import { ROTULOS_CONJUGAIS, ROTULOS_FILIACAO, Vinculo } from '../vinculos/vinculo.model';
 
 export interface PessoaNo {
   readonly pessoa: Pessoa;
@@ -105,7 +105,7 @@ export function construirDiagrama(pessoas: readonly Pessoa[], vinculos: readonly
       vinculo, caminho, marcacao,
       descricao: vinculo.tipo === 'uniao'
         ? `${ROTULOS_CONJUGAIS[vinculo.situacao ?? 'juntos']}: ${origem.pessoa.nome} e ${destino.pessoa.nome}`
-        : `Filiação: ${origem.pessoa.nome} é responsável por ${destino.pessoa.nome}`
+        : `${ROTULOS_FILIACAO[vinculo.modalidade ?? 'nao_informada']}: ${origem.pessoa.nome} é responsável por ${destino.pessoa.nome}`
     };
   });
   return { pessoas: nos, conexoes, largura, altura };

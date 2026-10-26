@@ -20,6 +20,10 @@ No cadastro de pessoas, escolha **Neutro**, **Quadrado**, **Círculo** ou **Losa
 
 Genogramas antigos continuam compatíveis. Veja a [decisão sobre símbolos e situações conjugais](docs/decisoes/002-simbolos-e-situacao-conjugal.md).
 
+## Adoção e acolhimento
+
+Em **Filiação ou cuidado**, escolha a modalidade do vínculo: não especificada, adoção ou acolhimento. O diagrama usa seta tracejada para adoção e pontilhada para acolhimento. A modalidade pode ser alterada na lista e é preservada ao salvar e reabrir. Registros antigos continuam compatíveis. Veja o [guia de uso](docs/guia-de-uso.md).
+
 ## Salvar e reabrir
 
 1. Cadastre as pessoas e seus vínculos.

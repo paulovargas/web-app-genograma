@@ -64,3 +64,7 @@ Revisão da etapa 07: formulários pendentes precisam ser concluídos ou cancela
 - `vinculos[].situacao`: `juntos`, `separados` ou `divorciados`, exclusivo de `tipo: uniao`. Ausente significa união sem marca de separação ou divórcio.
 
 Os campos opcionais são preservados ao salvar e reabrir; não há alteração no recurso MockAPI nem migração dos registros existentes. Situações conjugais em filiação e valores desconhecidos são rejeitados. Ver [decisão 002](decisoes/002-simbolos-e-situacao-conjugal.md).
+
+## Campo opcional da etapa 09
+
+`vinculos[].modalidade` aceita `nao_informada`, `adocao` ou `acolhimento`, apenas em `tipo: filiacao`. Ausência mantém a filiação não especificada dos registros antigos. O campo é preservado na gravação e na reabertura. Modalidade desconhecida ou aplicada a uma união é rejeitada. Nenhuma alteração de schema de primeiro nível da MockAPI é necessária.

@@ -38,4 +38,17 @@ describe('validarGenograma', () => {
     expect(() => validarGenograma({ ...base, vinculos: [{ id: 'u', tipo: 'uniao', origemId: 'a', destinoId: 'b', situacao: 'invalida' }] })).toThrow();
     expect(() => validarGenograma({ ...base, vinculos: [{ id: 'f', tipo: 'filiacao', origemId: 'a', destinoId: 'b', situacao: 'separados' }] })).toThrow();
   });
+  it('deve preservar adoção e acolhimento e continuar aceitando vínculos antigos sem modalidade', () => {
+    const antigo = { ...base, vinculos: [{ id: 'f', tipo: 'filiacao' as const, origemId: 'a', destinoId: 'b' }] };
+    expect(validarGenograma(antigo)).toEqual(antigo);
+    for (const modalidade of ['adocao', 'acolhimento'] as const) {
+      const atualizado = { ...antigo, vinculos: [{ ...antigo.vinculos[0], modalidade }] };
+      expect(validarGenograma(atualizado)).toEqual(atualizado);
+    }
+  });
+
+  it('deve rejeitar modalidade desconhecida ou aplicada em união', () => {
+    expect(() => validarGenograma({ ...base, vinculos: [{ id: 'f', tipo: 'filiacao', origemId: 'a', destinoId: 'b', modalidade: 'invalida' }] })).toThrow();
+    expect(() => validarGenograma({ ...base, vinculos: [{ id: 'u', tipo: 'uniao', origemId: 'a', destinoId: 'b', modalidade: 'acolhimento' }] })).toThrow();
+  });
 });

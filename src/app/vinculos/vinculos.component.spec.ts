@@ -60,4 +60,24 @@ describe('VinculosComponent', () => {
     expect(service.vinculos()[0].situacao).toBe('divorciados');
     expect(fixture.nativeElement.textContent).toContain('a e b — divórcio');
   });
+  it('deve cadastrar adoção pelo formulário e alterar para acolhimento na lista', () => {
+    const service = TestBed.inject(GenogramaService);
+    for (const id of ['a', 'b']) service.salvarPessoa({ id, nome: id, nascimento: '', falecida: false });
+    const fixture = TestBed.createComponent(VinculosComponent);
+    fixture.detectChanges();
+    const component = fixture.componentInstance;
+    component.formulario.patchValue({ tipo: 'filiacao', origemId: 'a', destinoId: 'b', modalidade: 'adocao' });
+    fixture.detectChanges();
+    (fixture.nativeElement.querySelector('form') as HTMLFormElement).dispatchEvent(new Event('submit'));
+    fixture.detectChanges();
+    expect(service.vinculos()[0].modalidade).toBe('adocao');
+    const id = service.vinculos()[0].id;
+    const select = fixture.nativeElement.querySelector('li select') as HTMLSelectElement;
+    select.value = 'acolhimento';
+    select.dispatchEvent(new Event('change'));
+    fixture.detectChanges();
+    expect(service.vinculos()[0].id).toBe(id);
+    expect(service.vinculos()[0].modalidade).toBe('acolhimento');
+    expect(fixture.nativeElement.textContent).toContain('a → b — acolhimento');
+  });
 });

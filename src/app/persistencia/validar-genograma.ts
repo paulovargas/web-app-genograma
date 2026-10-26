@@ -1,7 +1,7 @@
 ﻿import { DadosGenograma, GenogramaSalvo } from './genograma.model';
 import { GenogramaService } from '../genograma/genograma.service';
 import { SIMBOLOS_PESSOA, SimboloPessoa } from '../pessoas/pessoa.model';
-import { SITUACOES_CONJUGAIS, SituacaoConjugal } from '../vinculos/vinculo.model';
+import { ModalidadeFiliacao, MODALIDADES_FILIACAO, SITUACOES_CONJUGAIS, SituacaoConjugal } from '../vinculos/vinculo.model';
 
 function registro(valor: unknown): valor is Record<string, unknown> {
   return typeof valor === 'object' && valor !== null;
@@ -33,8 +33,9 @@ export function validarGenograma(valor: unknown): GenogramaSalvo {
     if (!registro(vinculo) || typeof vinculo['id'] !== 'string' || !vinculo['id'].trim()
       || idsVinculos.has(vinculo['id']) || (vinculo['tipo'] !== 'uniao' && vinculo['tipo'] !== 'filiacao')
       || typeof vinculo['origemId'] !== 'string' || typeof vinculo['destinoId'] !== 'string'
+      || (vinculo['modalidade'] !== undefined && (vinculo['tipo'] !== 'filiacao' || !MODALIDADES_FILIACAO.includes(vinculo['modalidade'] as ModalidadeFiliacao)))
       || (vinculo['situacao'] !== undefined && (vinculo['tipo'] !== 'uniao' || !SITUACOES_CONJUGAIS.includes(vinculo['situacao'] as SituacaoConjugal)))
-      || temporario.adicionarVinculo(vinculo['tipo'], vinculo['origemId'], vinculo['destinoId'], vinculo['situacao'] as SituacaoConjugal | undefined)) {
+      || temporario.adicionarVinculo(vinculo['tipo'], vinculo['origemId'], vinculo['destinoId'], vinculo['situacao'] as SituacaoConjugal | undefined, vinculo['modalidade'] as ModalidadeFiliacao | undefined)) {
       throw new Error('O genograma contém vínculos inválidos, duplicados ou ciclos de ancestralidade.');
     }
     idsVinculos.add(vinculo['id']);
@@ -43,7 +44,8 @@ export function validarGenograma(valor: unknown): GenogramaSalvo {
   return {
     id: valor['id'], titulo: valor['titulo'], pessoas: temporario.pessoas(),
     vinculos: valor['vinculos'].map(vinculo => ({ id: vinculo.id, tipo: vinculo.tipo, origemId: vinculo.origemId, destinoId: vinculo.destinoId,
-      ...(vinculo.situacao !== undefined ? { situacao: vinculo.situacao } : {}) }))
+      ...(vinculo.situacao !== undefined ? { situacao: vinculo.situacao } : {}),
+      ...(vinculo.modalidade !== undefined ? { modalidade: vinculo.modalidade } : {}) }))
   };
 }
 

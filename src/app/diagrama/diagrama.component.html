@@ -28,7 +28,7 @@
         </marker>
       </defs>
       @for (conexao of diagrama().conexoes; track conexao.vinculo.id) {
-        <path class="connection" [class.union]="conexao.vinculo.tipo === 'uniao'" [attr.d]="conexao.caminho"
+        <path class="connection" [class.union]="conexao.vinculo.tipo === 'uniao'" [class.adoption]="conexao.vinculo.modalidade === 'adocao'" [class.foster]="conexao.vinculo.modalidade === 'acolhimento'" [attr.d]="conexao.caminho"
           [attr.marker-end]="conexao.vinculo.tipo === 'filiacao' ? 'url(#seta-filiacao)' : null">
           <title>{{ conexao.descricao }}</title>
         </path>
@@ -69,6 +69,8 @@
   <span><i class="card-symbol" aria-hidden="true"></i> Pessoa</span>
   <span><b aria-hidden="true">□ ○ ◇</b> Símbolo escolhido no cadastro</span>
   <span><i class="line-symbol" aria-hidden="true">→</i> Filiação: responsável → descendente</span>
+  <span><i class="adoption-symbol" aria-hidden="true"></i> Adoção →</span>
+  <span><i class="foster-symbol" aria-hidden="true"></i> Acolhimento →</span>
   <span><i class="union-symbol" aria-hidden="true"></i> União</span>
   <span><b aria-hidden="true">/</b> Separação</span>
   <span><b aria-hidden="true">//</b> Divórcio</span>

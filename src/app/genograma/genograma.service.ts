@@ -1,6 +1,6 @@
 ﻿import { Injectable, signal } from '@angular/core';
 import { Pessoa } from '../pessoas/pessoa.model';
-import { SituacaoConjugal, SITUACOES_CONJUGAIS, TipoVinculo, Vinculo } from '../vinculos/vinculo.model';
+import { ModalidadeFiliacao, MODALIDADES_FILIACAO, SituacaoConjugal, SITUACOES_CONJUGAIS, TipoVinculo, Vinculo } from '../vinculos/vinculo.model';
 
 @Injectable({ providedIn: 'root' })
 export class GenogramaService {
@@ -32,7 +32,10 @@ export class GenogramaService {
     this.pessoasEstado.update(pessoas => pessoas.filter(pessoa => pessoa.id !== id));
   }
 
-  adicionarVinculo(tipo: TipoVinculo, origemId: string, destinoId: string, situacao?: SituacaoConjugal): string | null {
+  adicionarVinculo(tipo: TipoVinculo, origemId: string, destinoId: string, situacao?: SituacaoConjugal, modalidade?: ModalidadeFiliacao): string | null {
+    if (modalidade !== undefined && (tipo !== 'filiacao' || !MODALIDADES_FILIACAO.includes(modalidade))) {
+      return 'Selecione uma modalidade válida para o vínculo de filiação ou cuidado.';
+    }
     if (situacao !== undefined && (tipo !== 'uniao' || !SITUACOES_CONJUGAIS.includes(situacao))) {
       return 'Selecione uma situação conjugal válida para a união.';
     }
@@ -48,10 +51,10 @@ export class GenogramaService {
     ));
     if (duplicado) return 'Este vínculo já foi cadastrado.';
     if (tipo === 'filiacao' && this.alcancaDescendente(destinoId, origemId)) {
-      return 'Esta filiação criaria um ciclo de ancestralidade.';
+      return 'Este vínculo criaria um ciclo entre responsáveis e pessoas vinculadas.';
     }
 
-    this.vinculosEstado.update(vinculos => [...vinculos, { id: crypto.randomUUID(), tipo, origemId, destinoId, ...(situacao ? { situacao } : {}) }]);
+    this.vinculosEstado.update(vinculos => [...vinculos, { id: crypto.randomUUID(), tipo, origemId, destinoId, ...(situacao ? { situacao } : {}), ...(modalidade ? { modalidade } : {}) }]);
     return null;
   }
 
@@ -64,6 +67,14 @@ export class GenogramaService {
     return null;
   }
 
+  alterarModalidadeFiliacao(id: string, modalidade: ModalidadeFiliacao): string | null {
+    if (!MODALIDADES_FILIACAO.includes(modalidade)) return 'Modalidade inválida.';
+    if (!this.vinculos().some(vinculo => vinculo.id === id && vinculo.tipo === 'filiacao')) {
+      return 'O vínculo de filiação ou cuidado não foi encontrado.';
+    }
+    this.vinculosEstado.update(vinculos => vinculos.map(vinculo => vinculo.id === id ? { ...vinculo, modalidade } : vinculo));
+    return null;
+  }
   removerVinculo(id: string): void {
     this.vinculosEstado.update(vinculos => vinculos.filter(vinculo => vinculo.id !== id));
   }

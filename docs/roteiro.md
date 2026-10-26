@@ -25,6 +25,7 @@ Situação: etapas 01 a 04 implementadas; etapa 06 antecipada e implementada com
 | Etapa | Entrega | Critérios de conclusão | Commit sugerido |
 | --- | --- | --- | --- |
 | 08 | Símbolos e situações conjugais | Escolher quadrado, círculo ou losango; representar separação e divórcio; salvar e reabrir mantendo compatibilidade | `feat: amplia simbolos e situacoes conjugais` |
+| 09 | Adoção e acolhimento | Criar e alterar modalidade, distinguir no diagrama e preservar na API com compatibilidade | `feat: adiciona adocao e acolhimento aos vinculos` |
 
 ## Modelo inicial proposto
 
@@ -220,3 +221,18 @@ Validação final:
 - `npm.cmd test -- --watch=false --browsers=ChromeHeadless`: 44 testes aprovados, incluindo gravação e reabertura dos novos campos com HTTP simulado.
 - Compilação TypeScript da suíte aprovada.
 - `git diff --check`: aprovado.
+
+## Entrega da etapa 09 — 26/10/2026
+
+Situação: concluída. Escopo: adoção e acolhimento; relações emocionais ficam para uma próxima ampliação.
+
+- Modalidade selecionável na criação e alteração pela lista, preservando o vínculo.
+- Adoção com seta tracejada, acolhimento com seta pontilhada, legenda e descrição textual atualizadas.
+- Acolhimento apresentado como cuidado; vínculos antigos não recebem natureza biológica presumida.
+- Regras de referências, duplicatas e ciclos mantidas para todas as modalidades direcionadas.
+- Persistência do campo opcional, com abertura de registros antigos sem migração ou regravação automática.
+- Decisão registrada em [adoção e acolhimento](decisoes/003-adocao-e-acolhimento.md).
+
+Validação: `npm.cmd run build` sem avisos; `npx.cmd tsc -p tsconfig.spec.json --noEmit` aprovado; `npm.cmd test -- --watch=false --browsers=ChromeHeadless` com 51 testes aprovados; `git diff --check` aprovado. Testes incluem salvamento e reabertura com HTTP simulado. Conferência no Chrome em desktop e viewport de 390 × 844, incluindo criação e alteração de modalidade, sem alargar a página e sem erros no console. Dados de conferência locais e fictícios; registros existentes da API não foram alterados.
+
+Commit sugerido: `feat: adiciona adocao e acolhimento aos vinculos`.

@@ -78,4 +78,16 @@ describe('DiagramaComponent', () => {
     expect(element.querySelector('details')?.textContent).toContain('Divórcio: A e B');
     expect(element.querySelector('details')?.textContent).toContain('símbolo: Quadrado');
   });
+  it('deve distinguir adoção e acolhimento com setas e descrição textual', () => {
+    const fixture = TestBed.createComponent(DiagramaComponent);
+    const service = TestBed.inject(GenogramaService);
+    for (const id of ['a', 'b', 'c']) service.salvarPessoa({ id, nome: id, nascimento: '', falecida: false });
+    service.adicionarVinculo('filiacao', 'a', 'b', undefined, 'adocao');
+    service.adicionarVinculo('filiacao', 'a', 'c', undefined, 'acolhimento');
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.connection.adoption').getAttribute('marker-end')).toBe('url(#seta-filiacao)');
+    expect(fixture.nativeElement.querySelector('.connection.foster')).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('details').textContent).toContain('Adoção: a é responsável por b');
+    expect(fixture.nativeElement.querySelector('details').textContent).toContain('Acolhimento: a é responsável por c');
+  });
 });

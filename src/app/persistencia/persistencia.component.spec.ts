@@ -177,4 +177,22 @@ describe('PersistenciaComponent', () => {
     expect(service.pessoas()[1].simbolo).toBe('losango');
     expect(service.vinculos()[0].situacao).toBe('divorciados');
   });
+  it('deve salvar e recuperar adoção e acolhimento pela API sem perder os identificadores', () => {
+    const component = criar().componentInstance;
+    const service = TestBed.inject(GenogramaService);
+    for (const id of ['a', 'b', 'c']) service.salvarPessoa({ id, nome: id, nascimento: '', falecida: false });
+    service.adicionarVinculo('filiacao', 'a', 'b', undefined, 'adocao');
+    service.adicionarVinculo('filiacao', 'a', 'c', undefined, 'acolhimento');
+    component.salvar();
+    const request = http.expectOne({ method: 'POST', url: GENOGRAMAS_URL });
+    expect(request.request.body.vinculos.map((vinculo: { modalidade: string }) => vinculo.modalidade)).toEqual(['adocao', 'acolhimento']);
+    const salvo = { ...request.request.body, id: 'modalidades' };
+    request.flush(salvo);
+    http.expectOne(GENOGRAMAS_URL).flush([salvo]);
+    component.solicitar('novo');
+    component.selecionado.setValue('modalidades');
+    component.solicitar('abrir');
+    http.expectOne(GENOGRAMAS_URL + '/modalidades').flush(salvo);
+    expect(service.vinculos()).toEqual(salvo.vinculos);
+  });
 });
