@@ -1,4 +1,5 @@
 ﻿import { TestBed } from '@angular/core/testing';
+import { GenogramaService } from '../genograma/genograma.service';
 import { PessoasComponent } from './pessoas.component';
 
 describe('PessoasComponent', () => {
@@ -76,5 +77,20 @@ describe('PessoasComponent', () => {
     fixture.detectChanges();
     expect(component.pessoas()).toEqual([]);
     expect(fixture.nativeElement.textContent).toContain('Adicione a primeira pessoa');
+  });
+  it('deve informar os vínculos na confirmação e removê-los ao excluir a pessoa', () => {
+    const fixture = criar();
+    const component = fixture.componentInstance;
+    const service = TestBed.inject(GenogramaService);
+    service.salvarPessoa({ id: 'a', nome: 'Ana', nascimento: '', falecida: false });
+    service.salvarPessoa({ id: 'b', nome: 'Bruno', nascimento: '', falecida: false });
+    service.adicionarVinculo('uniao', 'a', 'b');
+    component.solicitarExclusao(service.pessoas()[0]);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain('O cadastro e 1 vínculo(s) serão removidos.');
+    expect(service.vinculos().length).toBe(1);
+    component.excluir();
+    expect(service.vinculos()).toEqual([]);
+    expect(service.pessoas().map(pessoa => pessoa.nome)).toEqual(['Bruno']);
   });
 });

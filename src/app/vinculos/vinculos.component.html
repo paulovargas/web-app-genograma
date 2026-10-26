@@ -1,0 +1,43 @@
+﻿<section aria-labelledby="vinculos-titulo">
+  <header><h2 id="vinculos-titulo">Vínculos familiares</h2><span>{{ genograma.vinculos().length }} vínculo(s)</span></header>
+  <p>Conecte duas pessoas por união ou por filiação. Na filiação, a direção vai do responsável ao descendente.</p>
+  @if (genograma.pessoas().length < 2) {
+    <p class="notice">Cadastre pelo menos duas pessoas para criar um vínculo.</p>
+  } @else {
+    <form [formGroup]="formulario" (ngSubmit)="salvar()" aria-describedby="vinculo-erro">
+      <div class="fields">
+        <label>Tipo de vínculo
+          <select formControlName="tipo"><option value="uniao">União</option><option value="filiacao">Filiação</option></select>
+        </label>
+        <label>{{ formulario.controls.tipo.value === 'filiacao' ? 'Responsável' : 'Primeira pessoa' }}
+          <select formControlName="origemId" [attr.aria-invalid]="formulario.controls.origemId.touched && formulario.controls.origemId.invalid">
+            <option value="">Selecione uma pessoa</option>
+            @for (pessoa of genograma.pessoas(); track pessoa.id) { <option [value]="pessoa.id">{{ pessoa.nome }} · {{ pessoa.id.slice(0, 8) }}</option> }
+          </select>
+        </label>
+        <label>{{ formulario.controls.tipo.value === 'filiacao' ? 'Descendente' : 'Segunda pessoa' }}
+          <select formControlName="destinoId" [attr.aria-invalid]="formulario.controls.destinoId.touched && formulario.controls.destinoId.invalid">
+            <option value="">Selecione uma pessoa</option>
+            @for (pessoa of genograma.pessoas(); track pessoa.id) { <option [value]="pessoa.id">{{ pessoa.nome }} · {{ pessoa.id.slice(0, 8) }}</option> }
+          </select>
+        </label>
+      </div>
+      <button type="submit" class="primary">Adicionar vínculo</button>
+    </form>
+  }
+  <p id="vinculo-erro" class="error" role="alert">{{ erro() }}</p>
+  <p role="status">{{ mensagem() }}</p>
+  @if (vinculoParaExcluir(); as vinculo) {
+    <div class="notice">
+      <h3>Remover vínculo?</h3><p>{{ descricao(vinculo) }}</p>
+      <p>As duas pessoas continuarão cadastradas.</p>
+      <button type="button" (click)="excluir()">Confirmar remoção</button>
+      <button type="button" (click)="exclusaoId.set(null)">Cancelar</button>
+    </div>
+  }
+  <ul>
+    @for (vinculo of genograma.vinculos(); track vinculo.id) {
+      <li><span>{{ descricao(vinculo) }}</span><button type="button" (click)="exclusaoId.set(vinculo.id)" [attr.aria-label]="'Remover vínculo: ' + descricao(vinculo)">Remover</button></li>
+    } @empty { <li>Nenhum vínculo cadastrado.</li> }
+  </ul>
+</section>

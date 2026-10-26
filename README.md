@@ -4,7 +4,7 @@ Aplicação Angular para construir e visualizar pessoas e vínculos familiares e
 
 ## Estado atual
 
-Estrutura inicial do Angular 19, com TypeScript, CSS, Jasmine e Karma. Editor com cadastro, edição e remoção de pessoas em memória. Nome obrigatório, nascimento opcional e indicação de falecimento. Os dados são perdidos ao recarregar a página. Vínculos, diagrama e persistência ainda não implementados. Backend e tecnologia do diagrama ainda não definidos.
+Estrutura inicial do Angular 19, com TypeScript, CSS, Jasmine e Karma. Editor com cadastro, edição e remoção de pessoas em memória e criação e remoção de vínculos de união e filiação. Nome obrigatório, nascimento opcional e indicação de falecimento. Os dados são perdidos ao recarregar a página. Vínculos possuem validação de duplicatas e ciclos de ancestralidade. Diagrama e persistência ainda não implementados. Backend e tecnologia do diagrama ainda não definidos.
 
 ## Executar
 

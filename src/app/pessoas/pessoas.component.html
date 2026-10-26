@@ -27,7 +27,7 @@
   @if (pessoaParaExcluir(); as pessoa) {
     <section class="confirmation" aria-labelledby="exclusao-titulo">
       <h3 id="exclusao-titulo">Remover {{ pessoa.nome }}?</h3>
-      <p>O cadastro será removido. Ainda não há vínculos nesta etapa.</p>
+      <p>O cadastro e {{ vinculosParaExcluir().length }} vínculo(s) serão removidos.</p>
       <div class="actions">
         <button type="button" class="danger" (click)="excluir()">Confirmar remoção</button>
         <button type="button" (click)="exclusaoId.set(null)">Cancelar</button>
@@ -41,7 +41,7 @@
     <ul>
       @for (pessoa of pessoas(); track pessoa.id) {
         <li>
-          <strong>{{ pessoa.nome }}</strong>
+          <strong>{{ pessoa.nome }}</strong><small>Identificação: {{ pessoa.id.slice(0, 8) }}</small>
           @if (pessoa.nascimento) { <small>Nascimento: {{ pessoa.nascimento.split('-').reverse().join('/') }}</small> }
           @if (pessoa.falecida) { <small>Pessoa falecida</small> }
           <div class="actions">

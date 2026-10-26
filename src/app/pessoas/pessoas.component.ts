@@ -1,5 +1,6 @@
-﻿import { Component, computed, signal } from '@angular/core';
+﻿import { Component, computed, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { GenogramaService } from '../genograma/genograma.service';
 import { Pessoa } from './pessoa.model';
 
 @Component({
@@ -10,12 +11,14 @@ import { Pessoa } from './pessoa.model';
   styleUrl: './pessoas.component.css'
 })
 export class PessoasComponent {
-  readonly pessoas = signal<readonly Pessoa[]>([]);
+  readonly genograma = inject(GenogramaService);
+  readonly pessoas = this.genograma.pessoas;
   readonly formularioAberto = signal(false);
   readonly editandoId = signal<string | null>(null);
   readonly exclusaoId = signal<string | null>(null);
   readonly mensagem = signal('');
   readonly pessoaParaExcluir = computed(() => this.pessoas().find(pessoa => pessoa.id === this.exclusaoId()));
+  readonly vinculosParaExcluir = computed(() => this.genograma.vinculosDaPessoa(this.exclusaoId() ?? ''));
   readonly formulario = new FormGroup({
     nome: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.pattern(/\S/)] }),
     nascimento: new FormControl('', { nonNullable: true }),
@@ -43,9 +46,7 @@ export class PessoasComponent {
     const dados = this.formulario.getRawValue();
     const editandoId = this.editandoId();
     const pessoa: Pessoa = { ...dados, nome: dados.nome.trim(), id: editandoId ?? crypto.randomUUID() };
-    this.pessoas.update(pessoas => editandoId
-      ? pessoas.map(atual => atual.id === editandoId ? pessoa : atual)
-      : [...pessoas, pessoa]);
+    this.genograma.salvarPessoa(pessoa);
     this.cancelar();
     this.mensagem.set(editandoId ? 'Pessoa atualizada.' : 'Pessoa adicionada.');
   }
@@ -65,7 +66,7 @@ export class PessoasComponent {
   excluir(): void {
     const id = this.exclusaoId();
     if (!id) return;
-    this.pessoas.update(pessoas => pessoas.filter(pessoa => pessoa.id !== id));
+    this.genograma.removerPessoa(id);
     this.exclusaoId.set(null);
     this.mensagem.set('Pessoa removida.');
   }

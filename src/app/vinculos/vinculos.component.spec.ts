@@ -1,0 +1,47 @@
+﻿import { TestBed } from '@angular/core/testing';
+import { GenogramaService } from '../genograma/genograma.service';
+import { VinculosComponent } from './vinculos.component';
+
+describe('VinculosComponent', () => {
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({ imports: [VinculosComponent] }).compileComponents();
+  });
+
+  it('deve orientar o cadastro quando faltarem pessoas', () => {
+    const fixture = TestBed.createComponent(VinculosComponent);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain('Cadastre pelo menos duas pessoas');
+    expect(fixture.nativeElement.querySelector('form')).toBeNull();
+  });
+
+  it('deve cadastrar pelo formulário, mostrar erros de duplicata e confirmar a remoção', () => {
+    const service = TestBed.inject(GenogramaService);
+    for (const id of ['a', 'b']) service.salvarPessoa({ id, nome: id, nascimento: '', falecida: false });
+    const fixture = TestBed.createComponent(VinculosComponent);
+    const component = fixture.componentInstance;
+    fixture.detectChanges();
+    const element = fixture.nativeElement as HTMLElement;
+    const selects = element.querySelectorAll('select');
+    selects[1].value = 'a';
+    selects[1].dispatchEvent(new Event('change'));
+    selects[2].value = 'b';
+    selects[2].dispatchEvent(new Event('change'));
+    element.querySelector('form')!.dispatchEvent(new Event('submit'));
+    fixture.detectChanges();
+    expect(service.vinculos().length).toBe(1);
+    expect(element.textContent).toContain('Vínculo adicionado');
+
+    component.formulario.patchValue({ origemId: 'b', destinoId: 'a' });
+    component.salvar();
+    fixture.detectChanges();
+    expect(element.querySelector('[role=alert]')?.textContent).toContain('já foi cadastrado');
+    component.exclusaoId.set(service.vinculos()[0].id);
+    fixture.detectChanges();
+    expect(element.textContent).toContain('As duas pessoas continuarão cadastradas');
+    expect(service.vinculos().length).toBe(1);
+    component.excluir();
+    fixture.detectChanges();
+    expect(service.vinculos()).toEqual([]);
+    expect(service.pessoas().length).toBe(2);
+  });
+});

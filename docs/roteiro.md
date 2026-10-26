@@ -18,7 +18,7 @@ O escopo abaixo é uma proposta inicial, que pode ser refinada antes de cada eta
 | 06 | Persistência | Salvar localmente e recuperar após recarregar; tratar dados inválidos e falha de armazenamento | `feat: adiciona persistencia local` |
 | 07 | Revisão do fluxo | Validar fluxo completo, teclado, responsividade e mensagens; documentar uso e limitações | `docs: documenta primeiro fluxo completo` |
 
-Situação: etapa 01 documentada; etapa 02 implementada, com validação visual e execução dos testes pendentes; etapa 03 implementada, com validação em navegador pendente; etapas 04 a 07 pendentes.
+Situação: etapa 01 documentada; etapa 02 implementada, com validação visual e execução dos testes pendentes; etapa 03 implementada, com validação em navegador pendente; etapa 04 implementada e validada por testes; etapas 05 a 07 pendentes.
 
 ## Modelo inicial proposto
 
@@ -108,3 +108,27 @@ Validação: build de produção e compilação TypeScript da suíte executados 
 Commit sugerido: `feat: implementa cadastro de pessoas`.
 
 A execução de `npm.cmd test -- --watch=false --browsers=ChromeHeadless` compilou a suíte, mas o ChromeHeadless falhou ao iniciar por erro de GPU no ambiente. Os testes ainda precisam ser executados em um navegador funcional. `npx.cmd tsc -p tsconfig.spec.json --noEmit` passou.
+
+## Entrega da etapa 04 — 26/10/2026
+
+- Estado de pessoas e vínculos centralizado em `GenogramaService`, compartilhado pelos componentes.
+- Criação de união e filiação; filiação orientada do responsável ao descendente.
+- Impedidos vínculos consigo mesmo, referências inexistentes, duplicatas e ciclos diretos ou indiretos de ancestralidade.
+- União considera a ordem das pessoas indiferente. Múltiplos responsáveis são permitidos.
+- Remoção de vínculo com confirmação, preservando as pessoas.
+- Exclusão de pessoa informa a quantidade de vínculos afetados e remove essas conexões junto com o cadastro.
+- Pessoas com nomes iguais podem ser diferenciadas pela identificação curta na lista e nas opções do formulário.
+- Dados continuam apenas em memória; o diagrama permanece previsto para a etapa 05.
+
+Validação:
+
+- `npm.cmd run build`: passou sem avisos.
+- `npx.cmd tsc -p tsconfig.spec.json --noEmit`: passou.
+- `npm.cmd test -- --watch=false --browsers=ChromeHeadless`: suíte executada fora das restrições do sandbox, resolvendo a falha de inicialização do Chrome observada anteriormente.
+- A conferência visual em desktop e celular continua pendente.
+
+Decisão técnica: a busca de ciclos percorre apenas os vínculos de filiação, seguindo responsável → descendente. Uniões não definem ancestralidade.
+
+Commit sugerido: `feat: implementa vinculos familiares`.
+
+Resultado final da suíte: 14 testes passaram, incluindo os testes das etapas anteriores e a exclusão de pessoa com seus vínculos.
