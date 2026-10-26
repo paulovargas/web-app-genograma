@@ -21,6 +21,7 @@
       [attr.width]="diagrama().largura * zoom() / 100" [attr.height]="diagrama().altura * zoom() / 100"
       role="img" [attr.aria-label]="'Genograma com ' + diagrama().pessoas.length + ' pessoas e ' + diagrama().conexoes.length + ' vínculos. Consulte também a descrição textual abaixo.'">
       <defs>
+        <clipPath id="limite-nome" clipPathUnits="userSpaceOnUse"><rect x="12" y="10" width="136" height="36" /></clipPath>
         <marker id="seta-filiacao" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
           <path d="M 0 0 L 10 5 L 0 10 z" fill="#326e58" />
         </marker>
@@ -36,7 +37,7 @@
           <title>{{ no.pessoa.nome }}{{ no.pessoa.falecida ? ' — pessoa falecida' : '' }}{{ no.pessoa.nascimento ? ' — nascimento: ' + no.pessoa.nascimento : '' }}</title>
           <rect width="160" height="100" rx="10" />
           @for (linha of no.linhasNome; track $index) {
-            <text x="12" [attr.y]="24 + $index * 17" class="name">{{ linha }}</text>
+            <text x="12" [attr.y]="24 + $index * 17" class="name" clip-path="url(#limite-nome)">{{ linha }}</text>
           }
           <text x="12" y="64" class="detail">{{ no.pessoa.nascimento ? 'Nasc. ' + no.pessoa.nascimento.split('-').reverse().join('/') : 'Nascimento não informado' }}</text>
           <text x="12" y="84" class="detail">{{ no.pessoa.falecida ? '† Pessoa falecida' : 'Pessoa' }} · {{ no.pessoa.id.slice(0, 8) }}</text>

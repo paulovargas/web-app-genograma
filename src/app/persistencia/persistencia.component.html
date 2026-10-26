@@ -5,7 +5,7 @@
     <button type="button" (click)="solicitar('novo')" [disabled]="ocupado()">Novo</button>
   </div>
   @if (titulo.touched && titulo.invalid) { <p id="titulo-erro" class="error">Informe um título.</p> }
-  <p>{{ alterado() ? 'Há alterações não salvas.' : (idAtual() ? 'Versão salva na API.' : 'Novo genograma ainda não salvo.') }} O salvamento é manual.</p>
+  <p>{{ rascunhoPendente() ? 'Há um formulário ainda não concluído.' : alterado() ? 'Há alterações não salvas.' : (idAtual() ? 'Versão salva na API.' : 'Novo genograma ainda não salvo.') }} O salvamento é manual.</p>
   <div class="save-row">
     <label>Genogramas salvos
       <select [formControl]="selecionado" [attr.disabled]="ocupado() || confirmacao() !== null ? '' : null">

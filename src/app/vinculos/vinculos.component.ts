@@ -1,4 +1,5 @@
-﻿import { Component, computed, effect, inject, signal } from '@angular/core';
+﻿import { toSignal } from '@angular/core/rxjs-interop';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { GenogramaService } from '../genograma/genograma.service';
 import { TipoVinculo, Vinculo } from './vinculo.model';
@@ -21,6 +22,17 @@ export class VinculosComponent {
     origemId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     destinoId: new FormControl('', { nonNullable: true, validators: [Validators.required] })
   });
+
+  private readonly eventosFormulario = toSignal(this.formulario.events);
+  readonly rascunhoPendente = computed(() => {
+    this.eventosFormulario();
+    return this.formulario.dirty;
+  });
+
+  cancelar(): void {
+    this.formulario.reset();
+    this.erro.set('');
+  }
 
   constructor() {
     effect(() => {

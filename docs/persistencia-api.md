@@ -55,3 +55,5 @@ As requisições têm limite de espera de 15 segundos. Não há repetição auto
 - `npm.cmd test -- --watch=false --browsers=ChromeHeadless`: 24 testes aprovados, executados fora das restrições do sandbox.
 - POST, GET e PUT reais confirmados com registro fictício temporário; somente esse registro foi removido ao final.
 - Conferência visual em desktop e celular pendente.
+
+Revisão da etapa 07: formulários pendentes precisam ser concluídos ou cancelados antes de salvar o conjunto. O descarte considera esses rascunhos e o navegador é instruído a avisar ao sair com alterações pendentes. Consulte o [guia de uso](guia-de-uso.md).

@@ -1,4 +1,5 @@
-﻿import { Component, computed, effect, inject, signal } from '@angular/core';
+﻿import { toSignal } from '@angular/core/rxjs-interop';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { GenogramaService } from '../genograma/genograma.service';
 import { Pessoa } from './pessoa.model';
@@ -25,6 +26,12 @@ export class PessoasComponent {
     falecida: new FormControl(false, { nonNullable: true })
   });
 
+  private readonly eventosFormulario = toSignal(this.formulario.events);
+  readonly rascunhoPendente = computed(() => {
+    this.eventosFormulario();
+    return this.formularioAberto() && this.formulario.dirty;
+  });
+
   constructor() {
     effect(() => {
       this.genograma.sessao();
@@ -35,6 +42,7 @@ export class PessoasComponent {
   }
 
   novaPessoa(): void {
+    this.exclusaoId.set(null);
     this.cancelar();
     this.mensagem.set('');
     this.formularioAberto.set(true);

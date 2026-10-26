@@ -48,6 +48,12 @@ npm test -- --watch=false --browsers=ChromeHeadless
 
 Os testes precisam de Chrome disponível. O build é gerado em `dist/web-app-genograma/`.
 
+## Guia de uso
+
+Consulte o [guia do primeiro fluxo](docs/guia-de-uso.md) para cadastro, edição, salvamento, recuperação e navegação por teclado.
+
+O app avisa quando há formulários pendentes e solicita confirmação ao sair com alterações não salvas.
+
 ## Desenvolvimento por etapas
 
 Consulte o [roteiro](docs/roteiro.md) para escopo proposto, critérios de conclusão e padrão de commits.

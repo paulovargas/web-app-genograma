@@ -1,4 +1,4 @@
-﻿import { Component, computed, DestroyRef, inject, OnInit, output, signal } from '@angular/core';
+﻿import { Component, computed, DestroyRef, HostListener, inject, input, OnInit, output, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
@@ -18,6 +18,7 @@ export class PersistenciaComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly api = inject(GenogramaApiService);
   readonly genograma = inject(GenogramaService);
+  readonly rascunhoPendente = input(false);
   readonly ocupadoChange = output<boolean>();
   readonly titulo = new FormControl('Genograma sem título', { nonNullable: true, validators: [Validators.required, Validators.pattern(/\S/)] });
   readonly selecionado = new FormControl('', { nonNullable: true });
@@ -40,6 +41,14 @@ export class PersistenciaComponent implements OnInit {
     this.listar();
   }
 
+  @HostListener('window:beforeunload', ['$event'])
+  avisarAoSair(evento: BeforeUnloadEvent): void {
+    if (this.alterado() || this.rascunhoPendente()) {
+      evento.preventDefault();
+      evento.returnValue = '';
+    }
+  }
+
   listar(): void {
     if (this.listando()) return;
     this.listando.set(true);
@@ -58,6 +67,10 @@ export class PersistenciaComponent implements OnInit {
 
   salvar(): void {
     if (this.ocupado()) return;
+    if (this.rascunhoPendente()) {
+      this.erro.set('Conclua ou cancele o formulário de pessoa ou vínculo antes de salvar o genograma.');
+      return;
+    }
     this.titulo.markAsTouched();
     if (this.titulo.invalid) return;
     const dados: DadosGenograma = copiarDados({ titulo: this.titulo.value.trim(), pessoas: this.genograma.pessoas(), vinculos: this.genograma.vinculos() });
@@ -80,7 +93,7 @@ export class PersistenciaComponent implements OnInit {
 
   solicitar(acao: 'abrir' | 'novo'): void {
     if (this.ocupado() || (acao === 'abrir' && !this.selecionado.value)) return;
-    if (this.alterado()) { this.confirmacao.set(acao); return; }
+    if (this.alterado() || this.rascunhoPendente()) { this.confirmacao.set(acao); return; }
     this.executar(acao);
   }
 

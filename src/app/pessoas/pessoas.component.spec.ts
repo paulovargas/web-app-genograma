@@ -93,4 +93,14 @@ describe('PessoasComponent', () => {
     expect(service.vinculos()).toEqual([]);
     expect(service.pessoas().map(pessoa => pessoa.nome)).toEqual(['Bruno']);
   });
+  it('deve cancelar a confirmação de exclusão ao iniciar um novo cadastro', () => {
+    const fixture = criar();
+    const component = fixture.componentInstance;
+    const service = TestBed.inject(GenogramaService);
+    service.salvarPessoa({ id: 'a', nome: 'Ana', nascimento: '', falecida: false });
+    component.solicitarExclusao(service.pessoas()[0]);
+    component.novaPessoa();
+    expect(component.exclusaoId()).toBeNull();
+    expect(component.formularioAberto()).toBeTrue();
+  });
 });

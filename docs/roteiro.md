@@ -16,9 +16,9 @@ O escopo abaixo é uma proposta inicial, que pode ser refinada antes de cada eta
 | 04 | Vínculos | Criar e remover união e filiação; validar referências, duplicatas e ciclos de ancestralidade | `feat: implementa vinculos familiares` |
 | 05 | Diagrama | Definir simbologia e tecnologia; renderizar pessoas e conexões com legenda; refletir edições | `feat: adiciona visualizacao do genograma` |
 | 06 | Persistência na API (antecipada) | Salvar e recuperar genogramas completos; tratar espera, erros, descarte e respostas inválidas | `feat: integra persistencia de genogramas com mockapi` |
-| 07 | Revisão do fluxo | Validar fluxo completo, teclado, responsividade e mensagens; documentar uso e limitações | `docs: documenta primeiro fluxo completo` |
+| 07 | Revisão do fluxo | Validar fluxo completo, teclado, responsividade e mensagens; documentar uso e limitações | `fix: protege alteracoes pendentes e valida fluxo completo` |
 
-Situação: etapas 01 a 04 implementadas; etapa 06 antecipada e implementada com MockAPI. Etapa 05 implementada; etapa 07 pendente. Suíte automatizada aprovada; diagrama conferido em desktop e celular de 390 px.
+Situação: etapas 01 a 04 implementadas; etapa 06 antecipada e implementada com MockAPI. Etapas 05 e 07 concluídas. Primeiro fluxo revisado, com suíte automatizada aprovada e conferência visual e de teclado no Chrome em desktop e celular de 390 px.
 
 ## Modelo inicial proposto
 
@@ -164,3 +164,28 @@ Commit sugerido: `feat: integra persistencia de genogramas com mockapi`.
 Validação: build de produção sem avisos; 31 testes passaram no ChromeHeadless. Conferência visual no Chrome em desktop e viewport de 390 × 844 com pessoas fictícias, união e filiação. No celular, a largura do documento permaneceu em 390 px e a rolagem horizontal ficou contida na área do diagrama. Zoom de 50% conferido. Os dados fictícios dessa conferência ficaram apenas no editor, sem gravação na API.
 
 Commit sugerido: `feat: adiciona visualizacao do genograma`.
+
+## Entrega da etapa 07 — 26/10/2026
+
+Primeiro fluxo completo revisado e documentado no [guia de uso](guia-de-uso.md).
+
+Correções encontradas durante a revisão:
+
+- Formulários ainda em edição não são silenciosamente omitidos pelo salvamento do genograma; a interface orienta concluir ou cancelar.
+- A confirmação de descarte também considera rascunhos de pessoas e vínculos.
+- Aviso nativo ao fechar/atualizar com alterações ou formulários pendentes.
+- Indicador do cabeçalho distingue novo genograma, alterações pendentes e versão salva.
+- Iniciar novo cadastro de pessoa cancela a confirmação de exclusão anterior.
+- Formulário de vínculo pode ser limpo sem adicionar a conexão.
+- Texto de nomes limitado visualmente à área do cartão, preservando o nome completo no título e na descrição textual.
+
+Validação: testes integrados do fluxo completo com API simulada; verificações de teclado e mensagens no Chrome; layout revisado em desktop e 390 × 844; console sem erros. Não houve gravação nem alteração de registros reais da MockAPI nesta revisão.
+
+Commit sugerido: `fix: protege alteracoes pendentes e valida fluxo completo`.
+
+Resultado final da validação da etapa 07:
+
+- `npm.cmd run build`: aprovado sem avisos.
+- `npx.cmd tsc -p tsconfig.spec.json --noEmit`: aprovado.
+- `npm.cmd test -- --watch=false --browsers=ChromeHeadless`: 36 testes aprovados.
+- `git diff --check`: aprovado.

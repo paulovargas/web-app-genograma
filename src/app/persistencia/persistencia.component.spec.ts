@@ -126,4 +126,33 @@ describe('PersistenciaComponent', () => {
     expect(fixture.componentInstance.registros()).toEqual([{ id: '1', titulo: registro.titulo }]);
     expect(fixture.componentInstance.erroLista()).toBe('');
   });
+  it('deve impedir salvar um formulário pendente e confirmar antes de descartá-lo', () => {
+    const fixture = criar();
+    fixture.componentRef.setInput('rascunhoPendente', true);
+    fixture.detectChanges();
+    const component = fixture.componentInstance;
+    component.salvar();
+    expect(component.erro()).toContain('Conclua ou cancele');
+    http.expectNone(request => request.method === 'POST');
+    component.solicitar('novo');
+    expect(component.confirmacao()).toBe('novo');
+  });
+
+  it('deve avisar ao sair apenas quando houver alterações ou formulários pendentes', () => {
+    const fixture = criar();
+    const component = fixture.componentInstance;
+    const semAlteracoes = new Event('beforeunload', { cancelable: true });
+    component.avisarAoSair(semAlteracoes as BeforeUnloadEvent);
+    expect(semAlteracoes.defaultPrevented).toBeFalse();
+    component.titulo.setValue('Alterado');
+    const comAlteracoes = new Event('beforeunload', { cancelable: true });
+    component.avisarAoSair(comAlteracoes as BeforeUnloadEvent);
+    expect(comAlteracoes.defaultPrevented).toBeTrue();
+    component.titulo.setValue('Genograma sem título');
+    fixture.componentRef.setInput('rascunhoPendente', true);
+    fixture.detectChanges();
+    const comRascunho = new Event('beforeunload', { cancelable: true });
+    component.avisarAoSair(comRascunho as BeforeUnloadEvent);
+    expect(comRascunho.defaultPrevented).toBeTrue();
+  });
 });
