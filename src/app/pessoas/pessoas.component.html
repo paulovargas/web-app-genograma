@@ -1,0 +1,55 @@
+﻿<div class="heading"><h2>Pessoas</h2><span>{{ pessoas().length }}</span></div>
+<div class="content">
+  <button type="button" class="primary" (click)="novaPessoa()">Adicionar pessoa</button>
+  <p class="storage-note">Dados temporários: serão perdidos ao recarregar a página.</p>
+  <p role="status">{{ mensagem() }}</p>
+
+  @if (formularioAberto()) {
+    <form [formGroup]="formulario" (ngSubmit)="salvar()">
+      <h3>{{ editandoId() ? 'Editar pessoa' : 'Nova pessoa' }}</h3>
+      <label for="nome">Nome <span>(obrigatório)</span></label>
+      <input id="nome" type="text" formControlName="nome" autocomplete="off"
+        [attr.aria-invalid]="formulario.controls.nome.touched && formulario.controls.nome.invalid"
+        [attr.aria-describedby]="formulario.controls.nome.touched && formulario.controls.nome.invalid ? 'nome-erro' : null">
+      @if (formulario.controls.nome.touched && formulario.controls.nome.invalid) {
+        <p id="nome-erro" class="error">Informe o nome da pessoa.</p>
+      }
+      <label for="nascimento">Nascimento <span>(opcional)</span></label>
+      <input id="nascimento" type="date" formControlName="nascimento">
+      <label class="checkbox"><input type="checkbox" formControlName="falecida"> Pessoa falecida</label>
+      <div class="actions">
+        <button type="submit" class="primary">Salvar</button>
+        <button type="button" (click)="cancelar()">Cancelar</button>
+      </div>
+    </form>
+  }
+
+  @if (pessoaParaExcluir(); as pessoa) {
+    <section class="confirmation" aria-labelledby="exclusao-titulo">
+      <h3 id="exclusao-titulo">Remover {{ pessoa.nome }}?</h3>
+      <p>O cadastro será removido. Ainda não há vínculos nesta etapa.</p>
+      <div class="actions">
+        <button type="button" class="danger" (click)="excluir()">Confirmar remoção</button>
+        <button type="button" (click)="exclusaoId.set(null)">Cancelar</button>
+      </div>
+    </section>
+  }
+
+  @if (pessoas().length === 0) {
+    <div class="empty"><h3>A família começa aqui</h3><p>Adicione a primeira pessoa do genograma.</p></div>
+  } @else {
+    <ul>
+      @for (pessoa of pessoas(); track pessoa.id) {
+        <li>
+          <strong>{{ pessoa.nome }}</strong>
+          @if (pessoa.nascimento) { <small>Nascimento: {{ pessoa.nascimento.split('-').reverse().join('/') }}</small> }
+          @if (pessoa.falecida) { <small>Pessoa falecida</small> }
+          <div class="actions">
+            <button type="button" (click)="editar(pessoa)" [attr.aria-label]="'Editar ' + pessoa.nome">Editar</button>
+            <button type="button" (click)="solicitarExclusao(pessoa)" [attr.aria-label]="'Remover ' + pessoa.nome">Remover</button>
+          </div>
+        </li>
+      }
+    </ul>
+  }
+</div>

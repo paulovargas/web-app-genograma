@@ -15,7 +15,7 @@ describe('AppComponent', () => {
 
     expect(element.querySelector('#editor-title')?.textContent).toContain('Genograma sem título');
     expect(element.textContent).toContain('Nenhuma pessoa adicionada');
-    expect(element.textContent).toContain('Cadastro de pessoas');
+    expect(element.textContent).toContain('Adicionar pessoa');
     expect(element.querySelector('.skip-link')?.getAttribute('href')).toBe('#editor');
     expect(element.querySelector('#editor')).not.toBeNull();
   });

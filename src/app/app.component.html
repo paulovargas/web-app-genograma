@@ -18,22 +18,7 @@
   </section>
 
   <div class="workspace">
-    <aside class="sidebar" aria-labelledby="people-title">
-      <div class="panel-heading">
-        <h2 id="people-title">Pessoas</h2>
-        <span class="count" aria-label="0 pessoas">0</span>
-      </div>
-      <div class="people-empty">
-
-        <h3>A família começa aqui</h3>
-        <p>As pessoas do seu genograma aparecerão nesta lista.</p>
-      </div>
-      <div class="next-step">
-        <span class="eyebrow">EM BREVE</span>
-        <p>Cadastro de pessoas</p>
-        <span>Na próxima etapa, você poderá adicionar e editar os integrantes da família.</span>
-      </div>
-    </aside>
+    <aside class="sidebar" aria-label="Cadastro de pessoas"><app-pessoas #cadastro /></aside>
 
     <section id="editor" class="editor" aria-labelledby="editor-title" tabindex="-1">
       <div class="editor-toolbar">
@@ -48,7 +33,7 @@
           <p class="eyebrow">CADA CONEXÃO CONTA UMA HISTÓRIA</p>
           <h3>Espaço para a sua família</h3>
           <p>Seu genograma ganhará forma aqui, com as pessoas e os vínculos que você construir.</p>
-          <span class="empty-note">Nenhuma pessoa adicionada</span>
+          <span class="empty-note">{{ cadastro.pessoas().length === 0 ? 'Nenhuma pessoa adicionada' : cadastro.pessoas().length + ' pessoa(s) cadastrada(s)' }}</span>
         </div>
 
       </div>

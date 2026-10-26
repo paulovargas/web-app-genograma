@@ -18,7 +18,7 @@ O escopo abaixo é uma proposta inicial, que pode ser refinada antes de cada eta
 | 06 | Persistência | Salvar localmente e recuperar após recarregar; tratar dados inválidos e falha de armazenamento | `feat: adiciona persistencia local` |
 | 07 | Revisão do fluxo | Validar fluxo completo, teclado, responsividade e mensagens; documentar uso e limitações | `docs: documenta primeiro fluxo completo` |
 
-Situação: etapa 01 documentada; etapa 02 implementada, com validação visual e execução dos testes pendentes; etapas 03 a 07 pendentes.
+Situação: etapa 01 documentada; etapa 02 implementada, com validação visual e execução dos testes pendentes; etapa 03 implementada, com validação em navegador pendente; etapas 04 a 07 pendentes.
 
 ## Modelo inicial proposto
 
@@ -92,3 +92,19 @@ Validação executada:
 Pendências de validação: executar a suíte em ambiente com ChromeHeadless funcional e conferir a tela no navegador em desktop e celular. As adaptações responsivas foram implementadas, mas ainda não verificadas visualmente.
 
 No PowerShell deste ambiente, foi necessário usar `npm.cmd`, pois a política de execução bloqueia `npm.ps1`.
+
+## Entrega da etapa 03 — 26/10/2026
+
+- Componente de pessoas separado do layout, com modelo tipado e formulário reativo.
+- Cadastro e edição em memória: nome obrigatório sem aceitar apenas espaços, nascimento opcional e indicação de pessoa falecida.
+- Nomes iguais permitidos e identificadores distintos; edição preserva o identificador.
+- Exclusão com confirmação e opção de cancelar. Ainda não existem vínculos para remover.
+- Lista, contagem e mensagem de sucesso atualizadas após as operações.
+- Aviso de perda de dados ao recarregar; persistência continua prevista na etapa 06.
+- Testes adicionados para validação do nome, cadastro pelo formulário, nomes iguais, edição, cancelamento e exclusão confirmada.
+
+Validação: build de produção e compilação TypeScript da suíte executados com sucesso. A conferência visual no navegador permanece pendente.
+
+Commit sugerido: `feat: implementa cadastro de pessoas`.
+
+A execução de `npm.cmd test -- --watch=false --browsers=ChromeHeadless` compilou a suíte, mas o ChromeHeadless falhou ao iniciar por erro de GPU no ambiente. Os testes ainda precisam ser executados em um navegador funcional. `npx.cmd tsc -p tsconfig.spec.json --noEmit` passou.
