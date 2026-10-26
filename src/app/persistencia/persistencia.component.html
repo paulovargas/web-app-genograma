@@ -1,0 +1,31 @@
+﻿<section aria-label="Salvar e abrir genogramas" [attr.aria-busy]="ocupado()">
+  <div class="save-row">
+    <label>Título do genograma<input [formControl]="titulo" [readOnly]="ocupado()" [attr.aria-invalid]="titulo.touched && titulo.invalid" aria-describedby="titulo-erro"></label>
+    <button type="button" (click)="salvar()" [disabled]="ocupado() || confirmacao() !== null">{{ ocupado() ? 'Aguarde…' : 'Salvar genograma' }}</button>
+    <button type="button" (click)="solicitar('novo')" [disabled]="ocupado()">Novo</button>
+  </div>
+  @if (titulo.touched && titulo.invalid) { <p id="titulo-erro" class="error">Informe um título.</p> }
+  <p>{{ alterado() ? 'Há alterações não salvas.' : (idAtual() ? 'Versão salva na API.' : 'Novo genograma ainda não salvo.') }} O salvamento é manual.</p>
+  <div class="save-row">
+    <label>Genogramas salvos
+      <select [formControl]="selecionado" [attr.disabled]="ocupado() || confirmacao() !== null ? '' : null">
+        <option value="">Selecione um genograma</option>
+        @for (registro of registros(); track registro.id) { <option [value]="registro.id">{{ registro.titulo }} · {{ registro.id }}</option> }
+      </select>
+    </label>
+    <button type="button" (click)="solicitar('abrir')" [disabled]="ocupado() || !selecionado.value">Abrir</button>
+    <button type="button" (click)="listar()" [disabled]="listando() || ocupado()">Atualizar lista</button>
+  </div>
+  @if (listando()) { <p role="status">Buscando genogramas…</p> }
+  @else if (!erroLista() && registros().length === 0) { <p>Nenhum genograma salvo na API.</p> }
+  <p class="error" role="alert">{{ erroLista() }}</p>
+  @if (confirmacao()) {
+    <div class="confirmation">
+      <p>As alterações não salvas serão descartadas. Deseja continuar?</p>
+      <button type="button" (click)="confirmar()">Descartar e continuar</button>
+      <button type="button" (click)="confirmacao.set(null)">Cancelar</button>
+    </div>
+  }
+  <p class="error" role="alert">{{ erro() }}</p><p role="status">{{ mensagem() }}</p>
+  <p class="note">Ambiente de protótipo: use apenas dados fictícios.</p>
+</section>

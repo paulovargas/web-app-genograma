@@ -6,8 +6,16 @@ import { TipoVinculo, Vinculo } from '../vinculos/vinculo.model';
 export class GenogramaService {
   private readonly pessoasEstado = signal<readonly Pessoa[]>([]);
   private readonly vinculosEstado = signal<readonly Vinculo[]>([]);
+  private readonly sessaoEstado = signal(0);
+  readonly sessao = this.sessaoEstado.asReadonly();
   readonly pessoas = this.pessoasEstado.asReadonly();
   readonly vinculos = this.vinculosEstado.asReadonly();
+
+  substituir(pessoas: readonly Pessoa[], vinculos: readonly Vinculo[]): void {
+    this.pessoasEstado.set(pessoas);
+    this.vinculosEstado.set(vinculos);
+    this.sessaoEstado.update(sessao => sessao + 1);
+  }
 
   salvarPessoa(pessoa: Pessoa): void {
     this.pessoasEstado.update(pessoas => pessoas.some(atual => atual.id === pessoa.id)

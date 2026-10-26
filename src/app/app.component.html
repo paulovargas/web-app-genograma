@@ -17,12 +17,14 @@
     <span class="status"><span aria-hidden="true"></span> Novo genograma</span>
   </section>
 
+  <app-persistencia #persistencia (ocupadoChange)="ocupado.set($event)" />
+  <fieldset class="editor-controls" [disabled]="ocupado()"><legend class="sr-only">Editor do genograma</legend>
   <div class="workspace">
     <aside class="sidebar" aria-label="Cadastro de pessoas"><app-pessoas #cadastro /></aside>
 
     <section id="editor" class="editor" aria-labelledby="editor-title" tabindex="-1">
       <div class="editor-toolbar">
-        <div><h2 id="editor-title">Genograma sem título</h2></div>
+        <div><h2 id="editor-title">{{ persistencia.tituloAtual() }}</h2></div>
         <span class="canvas-label">Área de construção</span>
       </div>
       <div class="canvas">
@@ -41,6 +43,7 @@
   </div>
 
   <app-vinculos />
+  </fieldset>
 
   <section class="guide" aria-labelledby="guide-title">
     <div><p class="eyebrow">PASSO A PASSO</p><h2 id="guide-title">Do primeiro nome às conexões.</h2></div>

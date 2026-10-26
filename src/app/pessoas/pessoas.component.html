@@ -1,7 +1,7 @@
 ﻿<div class="heading"><h2>Pessoas</h2><span>{{ pessoas().length }}</span></div>
 <div class="content">
   <button type="button" class="primary" (click)="novaPessoa()">Adicionar pessoa</button>
-  <p class="storage-note">Dados temporários: serão perdidos ao recarregar a página.</p>
+  <p class="storage-note">Use Salvar genograma para guardar suas alterações. Alterações não salvas serão perdidas ao recarregar.</p>
   <p role="status">{{ mensagem() }}</p>
 
   @if (formularioAberto()) {

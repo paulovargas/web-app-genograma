@@ -1,12 +1,13 @@
-﻿import { Component } from '@angular/core';
+﻿import { Component, signal } from '@angular/core';
+import { PersistenciaComponent } from './persistencia/persistencia.component';
 import { VinculosComponent } from './vinculos/vinculos.component';
 import { PessoasComponent } from './pessoas/pessoas.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [PessoasComponent, VinculosComponent],
+  imports: [PessoasComponent, VinculosComponent, PersistenciaComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {}
+export class AppComponent { readonly ocupado = signal(false); }

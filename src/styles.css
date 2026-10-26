@@ -1,3 +1,6 @@
 ﻿* { box-sizing: border-box; }
 body { margin: 0; background: #f6f8f4; color: #293f34; font-family: 'Segoe UI', Arial, sans-serif; -webkit-font-smoothing: antialiased; }
 a:focus-visible, [tabindex]:focus-visible { outline: 3px solid #307d67; outline-offset: 4px; }
+
+.editor-controls { border: 0; padding: 0; margin: 0; min-width: 0; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }

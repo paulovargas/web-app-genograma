@@ -2,9 +2,9 @@
 
 ## Objetivo e escopo proposto
 
-Construir um editor individual no navegador: criar um genograma, cadastrar pessoas, relacionar integrantes, visualizar o diagrama e salvar localmente.
+Construir um editor individual no navegador: criar um genograma, cadastrar pessoas, relacionar integrantes, visualizar o diagrama e salvar na API de protótipo.
 
-O escopo abaixo é uma proposta inicial, que pode ser refinada antes de cada etapa. Autenticação, backend, compartilhamento, colaboração e exportação ficam para versões posteriores.
+O escopo abaixo é uma proposta inicial, que pode ser refinada antes de cada etapa. Autenticação, backend próprio, colaboração e exportação ficam para versões posteriores. A persistência foi antecipada por solicitação do usuário e usa MockAPI.
 
 ## Etapas
 
@@ -15,10 +15,10 @@ O escopo abaixo é uma proposta inicial, que pode ser refinada antes de cada eta
 | 03 | Pessoas | Adicionar, editar e remover pessoas em memória; validar nome; informar impactos da remoção | `feat: implementa cadastro de pessoas` |
 | 04 | Vínculos | Criar e remover união e filiação; validar referências, duplicatas e ciclos de ancestralidade | `feat: implementa vinculos familiares` |
 | 05 | Diagrama | Definir simbologia e tecnologia; renderizar pessoas e conexões com legenda; refletir edições | `feat: adiciona visualizacao do genograma` |
-| 06 | Persistência | Salvar localmente e recuperar após recarregar; tratar dados inválidos e falha de armazenamento | `feat: adiciona persistencia local` |
+| 06 | Persistência na API (antecipada) | Salvar e recuperar genogramas completos; tratar espera, erros, descarte e respostas inválidas | `feat: integra persistencia de genogramas com mockapi` |
 | 07 | Revisão do fluxo | Validar fluxo completo, teclado, responsividade e mensagens; documentar uso e limitações | `docs: documenta primeiro fluxo completo` |
 
-Situação: etapa 01 documentada; etapa 02 implementada, com validação visual e execução dos testes pendentes; etapa 03 implementada, com validação em navegador pendente; etapa 04 implementada e validada por testes; etapas 05 a 07 pendentes.
+Situação: etapas 01 a 04 implementadas; etapa 06 antecipada e implementada com MockAPI. Etapas 05 e 07 pendentes. Suíte automatizada aprovada; conferência visual em desktop e celular pendente.
 
 ## Modelo inicial proposto
 
@@ -132,3 +132,21 @@ Decisão técnica: a busca de ciclos percorre apenas os vínculos de filiação,
 Commit sugerido: `feat: implementa vinculos familiares`.
 
 Resultado final da suíte: 14 testes passaram, incluindo os testes das etapas anteriores e a exclusão de pessoa com seus vínculos.
+
+## Entrega da etapa 06 (antecipada) — 26/10/2026
+
+A pedido do usuário, a persistência foi antecipada e passou a usar o recurso `genogramas` da MockAPI em lugar do armazenamento local inicialmente proposto.
+
+- Salvamento manual: POST para criar e PUT para atualizar o registro aberto ou recém-criado.
+- Lista de genogramas, abertura por identificador e criação de um novo editor vazio.
+- Título obrigatório, indicador de alterações não salvas e confirmação antes de descartar o conteúdo atual.
+- Editor bloqueado durante salvamento e abertura, evitando alterações concorrentes com a requisição.
+- Falhas de rede e respostas inválidas preservam os dados locais. Validação de formato, referências, duplicatas e ciclos antes de abrir um registro.
+- Formulários de pessoas e vínculos são reiniciados quando outro genograma é aberto.
+- API sem autenticação e registros compartilhados; usar dados fictícios. Sem cache offline e sem exclusão remota pela interface.
+
+Validação: build sem avisos; compilação TypeScript dos testes aprovada; 24 testes passaram no ChromeHeadless. Teste real de POST, GET e PUT com registro fictício temporário aprovado; registro de teste removido ao finalizar. `git diff --check` aprovado. Conferência visual ainda pendente.
+
+Detalhes em [persistência pela API](persistencia-api.md).
+
+Commit sugerido: `feat: integra persistencia de genogramas com mockapi`.

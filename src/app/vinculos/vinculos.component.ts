@@ -1,4 +1,4 @@
-﻿import { Component, computed, inject, signal } from '@angular/core';
+﻿import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { GenogramaService } from '../genograma/genograma.service';
 import { TipoVinculo, Vinculo } from './vinculo.model';
@@ -21,6 +21,16 @@ export class VinculosComponent {
     origemId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     destinoId: new FormControl('', { nonNullable: true, validators: [Validators.required] })
   });
+
+  constructor() {
+    effect(() => {
+      this.genograma.sessao();
+      this.formulario.reset();
+      this.exclusaoId.set(null);
+      this.erro.set('');
+      this.mensagem.set('');
+    });
+  }
 
   salvar(): void {
     this.mensagem.set('');

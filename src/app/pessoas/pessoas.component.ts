@@ -1,4 +1,4 @@
-﻿import { Component, computed, inject, signal } from '@angular/core';
+﻿import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { GenogramaService } from '../genograma/genograma.service';
 import { Pessoa } from './pessoa.model';
@@ -24,6 +24,15 @@ export class PessoasComponent {
     nascimento: new FormControl('', { nonNullable: true }),
     falecida: new FormControl(false, { nonNullable: true })
   });
+
+  constructor() {
+    effect(() => {
+      this.genograma.sessao();
+      this.cancelar();
+      this.exclusaoId.set(null);
+      this.mensagem.set('');
+    });
+  }
 
   novaPessoa(): void {
     this.cancelar();
