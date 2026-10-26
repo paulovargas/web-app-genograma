@@ -1,59 +1,31 @@
-# WebAppGenograma
+﻿# App de Genograma
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.15.
+Aplicação Angular para construir e visualizar pessoas e vínculos familiares em um genograma.
 
-## Development server
+## Estado atual
 
-To start a local development server, run:
+Estrutura inicial do Angular 19, com TypeScript, CSS, Jasmine e Karma. Funcionalidades do genograma ainda não implementadas. Backend e tecnologia do diagrama ainda não definidos.
 
-```bash
-ng serve
-```
+## Executar
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Pré-requisitos: Node.js compatível com Angular 19 e npm.
 
 ```bash
-ng generate component component-name
+npm ci
+npm start
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Acesse `http://localhost:4200/`.
+
+## Validar
 
 ```bash
-ng generate --help
+npm run build
+npm test -- --watch=false --browsers=ChromeHeadless
 ```
 
-## Building
+Os testes precisam de Chrome disponível. O build é gerado em `dist/web-app-genograma/`.
 
-To build the project run:
+## Desenvolvimento por etapas
 
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Consulte o [roteiro](docs/roteiro.md) para escopo proposto, critérios de conclusão e padrão de commits.
