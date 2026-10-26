@@ -1,5 +1,5 @@
 ﻿import { Pessoa } from '../pessoas/pessoa.model';
-import { ROTULOS_CONJUGAIS, ROTULOS_FILIACAO, Vinculo } from '../vinculos/vinculo.model';
+import { ROTULOS_EMOCIONAIS, ROTULOS_CONJUGAIS, ROTULOS_FILIACAO, Vinculo } from '../vinculos/vinculo.model';
 
 export interface PessoaNo {
   readonly pessoa: Pessoa;
@@ -79,7 +79,19 @@ export function construirDiagrama(pessoas: readonly Pessoa[], vinculos: readonly
     const destino = porId.get(vinculo.destinoId)!;
     let caminho: string;
     let marcacao: { x: number; y: number } | undefined;
-    if (vinculo.tipo === 'filiacao') {
+    if (vinculo.tipo === 'emocional') {
+      if (origem.y === destino.y) {
+        const x1 = origem.x + LARGURA_CARTAO / 2;
+        const x2 = destino.x + LARGURA_CARTAO / 2;
+        const base = origem.y + ALTURA_CARTAO + 25;
+        caminho = `M ${x1} ${origem.y + ALTURA_CARTAO} V ${base} H ${x2} V ${destino.y + ALTURA_CARTAO}`;
+        marcacao = { x: (x1 + x2) / 2, y: base };
+      } else {
+        const lado = Math.min(origem.x, destino.x) - 25;
+        caminho = `M ${origem.x} ${origem.y + 70} H ${lado} V ${destino.y + 70} H ${destino.x}`;
+        marcacao = { x: lado, y: (origem.y + destino.y) / 2 + 70 };
+      }
+    } else if (vinculo.tipo === 'filiacao') {
       const x1 = origem.x + LARGURA_CARTAO / 2;
       const y1 = origem.y + ALTURA_CARTAO;
       const x2 = destino.x + LARGURA_CARTAO / 2;
@@ -103,7 +115,9 @@ export function construirDiagrama(pessoas: readonly Pessoa[], vinculos: readonly
     }
     return {
       vinculo, caminho, marcacao,
-      descricao: vinculo.tipo === 'uniao'
+      descricao: vinculo.tipo === 'emocional'
+        ? `${ROTULOS_EMOCIONAIS[vinculo.relacao!]}: ${origem.pessoa.nome} e ${destino.pessoa.nome}`
+        : vinculo.tipo === 'uniao'
         ? `${ROTULOS_CONJUGAIS[vinculo.situacao ?? 'juntos']}: ${origem.pessoa.nome} e ${destino.pessoa.nome}`
         : `${ROTULOS_FILIACAO[vinculo.modalidade ?? 'nao_informada']}: ${origem.pessoa.nome} é responsável por ${destino.pessoa.nome}`
     };

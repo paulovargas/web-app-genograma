@@ -80,4 +80,21 @@ describe('VinculosComponent', () => {
     expect(service.vinculos()[0].modalidade).toBe('acolhimento');
     expect(fixture.nativeElement.textContent).toContain('a → b — acolhimento');
   });
+  it('deve criar vínculo emocional e atualizar a relação pela lista preservando o identificador', () => {
+    const service = TestBed.inject(GenogramaService);
+    for (const id of ['a', 'b']) service.salvarPessoa({ id, nome: id, nascimento: '', falecida: false });
+    const fixture = TestBed.createComponent(VinculosComponent);
+    fixture.detectChanges();
+    fixture.componentInstance.formulario.patchValue({ tipo: 'emocional', origemId: 'a', destinoId: 'b', relacao: 'proximidade' });
+    fixture.componentInstance.salvar();
+    fixture.detectChanges();
+    const id = service.vinculos()[0].id;
+    const select = fixture.nativeElement.querySelector('li select') as HTMLSelectElement;
+    select.value = 'conflito';
+    select.dispatchEvent(new Event('change'));
+    fixture.detectChanges();
+    expect(service.vinculos()[0].id).toBe(id);
+    expect(service.vinculos()[0].relacao).toBe('conflito');
+    expect(fixture.nativeElement.textContent).toContain('a e b — conflito');
+  });
 });

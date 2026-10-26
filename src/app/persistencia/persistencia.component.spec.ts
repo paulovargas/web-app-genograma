@@ -195,4 +195,21 @@ describe('PersistenciaComponent', () => {
     http.expectOne(GENOGRAMAS_URL + '/modalidades').flush(salvo);
     expect(service.vinculos()).toEqual(salvo.vinculos);
   });
+  it('deve salvar e recuperar vínculos emocionais com a relação escolhida', () => {
+    const component = criar().componentInstance;
+    const service = TestBed.inject(GenogramaService);
+    for (const id of ['a', 'b']) service.salvarPessoa({ id, nome: id, nascimento: '', falecida: false });
+    service.adicionarVinculo('emocional', 'a', 'b', undefined, undefined, 'afastamento');
+    component.salvar();
+    const request = http.expectOne({ method: 'POST', url: GENOGRAMAS_URL });
+    expect(request.request.body.vinculos[0].relacao).toBe('afastamento');
+    const salvo = { ...request.request.body, id: 'emocional' };
+    request.flush(salvo);
+    http.expectOne(GENOGRAMAS_URL).flush([salvo]);
+    component.solicitar('novo');
+    component.selecionado.setValue('emocional');
+    component.solicitar('abrir');
+    http.expectOne(GENOGRAMAS_URL + '/emocional').flush(salvo);
+    expect(service.vinculos()).toEqual(salvo.vinculos);
+  });
 });

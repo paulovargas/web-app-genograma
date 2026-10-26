@@ -26,6 +26,7 @@ Situação: etapas 01 a 04 implementadas; etapa 06 antecipada e implementada com
 | --- | --- | --- | --- |
 | 08 | Símbolos e situações conjugais | Escolher quadrado, círculo ou losango; representar separação e divórcio; salvar e reabrir mantendo compatibilidade | `feat: amplia simbolos e situacoes conjugais` |
 | 09 | Adoção e acolhimento | Criar e alterar modalidade, distinguir no diagrama e preservar na API com compatibilidade | `feat: adiciona adocao e acolhimento aos vinculos` |
+| 10 | Vínculos emocionais | Proximidade, conflito e afastamento, edição, diagrama e persistência independentes de filiação | `feat: adiciona vinculos emocionais ao genograma` |
 
 ## Modelo inicial proposto
 
@@ -236,3 +237,19 @@ Situação: concluída. Escopo: adoção e acolhimento; relações emocionais fi
 Validação: `npm.cmd run build` sem avisos; `npx.cmd tsc -p tsconfig.spec.json --noEmit` aprovado; `npm.cmd test -- --watch=false --browsers=ChromeHeadless` com 51 testes aprovados; `git diff --check` aprovado. Testes incluem salvamento e reabertura com HTTP simulado. Conferência no Chrome em desktop e viewport de 390 × 844, incluindo criação e alteração de modalidade, sem alargar a página e sem erros no console. Dados de conferência locais e fictícios; registros existentes da API não foram alterados.
 
 Commit sugerido: `feat: adiciona adocao e acolhimento aos vinculos`.
+
+## Entrega da etapa 10 — 26/10/2026
+
+Situação: concluída. Vínculos emocionais de proximidade, conflito e afastamento.
+
+- Criação e alteração da relação pela lista, com preservação do identificador.
+- Vínculos simétricos: uma relação emocional atual por par, sem duplicata com a ordem invertida.
+- Coexistência com união e filiação/cuidado; referências e exclusão em conjunto preservadas.
+- Diagrama sem setas para relações emocionais, com linha dupla, marca de conflito ou pontilhado, além de legenda e descrição textual.
+- Relações emocionais não alteram níveis de gerações nem participam da validação de ciclos de filiação.
+- Persistência do tipo e da relação na API, com compatibilidade dos registros antigos.
+- Decisão registrada em [vínculos emocionais](decisoes/004-vinculos-emocionais.md).
+
+Validação: `npm.cmd run build` aprovado sem avisos; `npx.cmd tsc -p tsconfig.spec.json --noEmit` aprovado; `npm.cmd test -- --watch=false --browsers=ChromeHeadless` com 58 testes aprovados; `git diff --check` aprovado. Testes cobrem regras, visualização e salvamento/reabertura com HTTP simulado. Interface conferida no Chrome em desktop e viewport de 390 × 844, incluindo edição pela lista, sem alargar a página e sem erros no console. Dados fictícios usados apenas no editor, sem alteração dos registros existentes da API.
+
+Commit sugerido: `feat: adiciona vinculos emocionais ao genograma`.

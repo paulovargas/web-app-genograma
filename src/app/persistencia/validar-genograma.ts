@@ -1,7 +1,7 @@
 ﻿import { DadosGenograma, GenogramaSalvo } from './genograma.model';
 import { GenogramaService } from '../genograma/genograma.service';
 import { SIMBOLOS_PESSOA, SimboloPessoa } from '../pessoas/pessoa.model';
-import { ModalidadeFiliacao, MODALIDADES_FILIACAO, SITUACOES_CONJUGAIS, SituacaoConjugal } from '../vinculos/vinculo.model';
+import { RelacaoEmocional, RELACOES_EMOCIONAIS, ModalidadeFiliacao, MODALIDADES_FILIACAO, SITUACOES_CONJUGAIS, SituacaoConjugal } from '../vinculos/vinculo.model';
 
 function registro(valor: unknown): valor is Record<string, unknown> {
   return typeof valor === 'object' && valor !== null;
@@ -31,11 +31,12 @@ export function validarGenograma(valor: unknown): GenogramaSalvo {
   const idsVinculos = new Set<string>();
   for (const vinculo of valor['vinculos']) {
     if (!registro(vinculo) || typeof vinculo['id'] !== 'string' || !vinculo['id'].trim()
-      || idsVinculos.has(vinculo['id']) || (vinculo['tipo'] !== 'uniao' && vinculo['tipo'] !== 'filiacao')
+      || idsVinculos.has(vinculo['id']) || (vinculo['tipo'] !== 'uniao' && vinculo['tipo'] !== 'filiacao' && vinculo['tipo'] !== 'emocional')
+      || (vinculo['tipo'] === 'emocional' ? !RELACOES_EMOCIONAIS.includes(vinculo['relacao'] as RelacaoEmocional) : vinculo['relacao'] !== undefined)
       || typeof vinculo['origemId'] !== 'string' || typeof vinculo['destinoId'] !== 'string'
       || (vinculo['modalidade'] !== undefined && (vinculo['tipo'] !== 'filiacao' || !MODALIDADES_FILIACAO.includes(vinculo['modalidade'] as ModalidadeFiliacao)))
       || (vinculo['situacao'] !== undefined && (vinculo['tipo'] !== 'uniao' || !SITUACOES_CONJUGAIS.includes(vinculo['situacao'] as SituacaoConjugal)))
-      || temporario.adicionarVinculo(vinculo['tipo'], vinculo['origemId'], vinculo['destinoId'], vinculo['situacao'] as SituacaoConjugal | undefined, vinculo['modalidade'] as ModalidadeFiliacao | undefined)) {
+      || temporario.adicionarVinculo(vinculo['tipo'], vinculo['origemId'], vinculo['destinoId'], vinculo['situacao'] as SituacaoConjugal | undefined, vinculo['modalidade'] as ModalidadeFiliacao | undefined, vinculo['relacao'] as RelacaoEmocional | undefined)) {
       throw new Error('O genograma contém vínculos inválidos, duplicados ou ciclos de ancestralidade.');
     }
     idsVinculos.add(vinculo['id']);
@@ -45,7 +46,8 @@ export function validarGenograma(valor: unknown): GenogramaSalvo {
     id: valor['id'], titulo: valor['titulo'], pessoas: temporario.pessoas(),
     vinculos: valor['vinculos'].map(vinculo => ({ id: vinculo.id, tipo: vinculo.tipo, origemId: vinculo.origemId, destinoId: vinculo.destinoId,
       ...(vinculo.situacao !== undefined ? { situacao: vinculo.situacao } : {}),
-      ...(vinculo.modalidade !== undefined ? { modalidade: vinculo.modalidade } : {}) }))
+      ...(vinculo.modalidade !== undefined ? { modalidade: vinculo.modalidade } : {}),
+      ...(vinculo.relacao !== undefined ? { relacao: vinculo.relacao } : {}) }))
   };
 }
 

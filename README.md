@@ -24,6 +24,10 @@ Genogramas antigos continuam compatíveis. Veja a [decisão sobre símbolos e si
 
 Em **Filiação ou cuidado**, escolha a modalidade do vínculo: não especificada, adoção ou acolhimento. O diagrama usa seta tracejada para adoção e pontilhada para acolhimento. A modalidade pode ser alterada na lista e é preservada ao salvar e reabrir. Registros antigos continuam compatíveis. Veja o [guia de uso](docs/guia-de-uso.md).
 
+## Vínculos emocionais
+
+Escolha **Emocional** para registrar proximidade, conflito ou afastamento entre duas pessoas. A relação pode ser alterada pela lista, aparece no diagrama e é preservada ao salvar e reabrir. Vínculos emocionais podem coexistir com os familiares e não alteram as gerações. Veja a [convenção visual e regras](docs/decisoes/004-vinculos-emocionais.md).
+
 ## Salvar e reabrir
 
 1. Cadastre as pessoas e seus vínculos.

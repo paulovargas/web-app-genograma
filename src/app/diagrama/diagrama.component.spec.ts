@@ -90,4 +90,20 @@ describe('DiagramaComponent', () => {
     expect(fixture.nativeElement.querySelector('details').textContent).toContain('Adoção: a é responsável por b');
     expect(fixture.nativeElement.querySelector('details').textContent).toContain('Acolhimento: a é responsável por c');
   });
+  it('deve distinguir os vínculos emocionais sem setas e informar sua natureza no texto', () => {
+    const fixture = TestBed.createComponent(DiagramaComponent);
+    const service = TestBed.inject(GenogramaService);
+    for (const id of ['a', 'b', 'c', 'd']) service.salvarPessoa({ id, nome: id, nascimento: '', falecida: false });
+    service.adicionarVinculo('emocional', 'a', 'b', undefined, undefined, 'proximidade');
+    service.adicionarVinculo('emocional', 'b', 'c', undefined, undefined, 'conflito');
+    service.adicionarVinculo('emocional', 'c', 'd', undefined, undefined, 'afastamento');
+    fixture.detectChanges();
+    const element = fixture.nativeElement as HTMLElement;
+    expect(element.querySelectorAll('.connection.emotional').length).toBe(4);
+    expect(element.querySelector('.connection.conflict')).not.toBeNull();
+    expect(element.querySelector('.connection.distant')).not.toBeNull();
+    expect(element.querySelector('.conflict-mark')).not.toBeNull();
+    for (const path of element.querySelectorAll('.connection.emotional')) expect(path.getAttribute('marker-end')).toBeNull();
+    expect(element.querySelector('details')?.textContent).toContain('Conflito: b e c');
+  });
 });

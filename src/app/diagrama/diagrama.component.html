@@ -28,10 +28,14 @@
         </marker>
       </defs>
       @for (conexao of diagrama().conexoes; track conexao.vinculo.id) {
-        <path class="connection" [class.union]="conexao.vinculo.tipo === 'uniao'" [class.adoption]="conexao.vinculo.modalidade === 'adocao'" [class.foster]="conexao.vinculo.modalidade === 'acolhimento'" [attr.d]="conexao.caminho"
+        <path class="connection" [class.emotional]="conexao.vinculo.tipo === 'emocional'" [class.conflict]="conexao.vinculo.relacao === 'conflito'" [class.distant]="conexao.vinculo.relacao === 'afastamento'" [class.union]="conexao.vinculo.tipo === 'uniao'" [class.adoption]="conexao.vinculo.modalidade === 'adocao'" [class.foster]="conexao.vinculo.modalidade === 'acolhimento'" [attr.d]="conexao.caminho"
           [attr.marker-end]="conexao.vinculo.tipo === 'filiacao' ? 'url(#seta-filiacao)' : null">
           <title>{{ conexao.descricao }}</title>
         </path>
+        @if (conexao.vinculo.relacao === 'proximidade') { <path class="connection emotional" [attr.d]="conexao.caminho" transform="translate(0,4)" aria-hidden="true" /> }
+        @if (conexao.marcacao && conexao.vinculo.relacao === 'conflito') {
+          <g class="conflict-mark" [attr.transform]="'translate(' + conexao.marcacao.x + ',' + conexao.marcacao.y + ')'"><rect x="-14" y="-8" width="28" height="16"/><path d="M -12 0 l 4 -5 l 4 10 l 4 -10 l 4 10 l 4 -5"/></g>
+        }
         @if (conexao.marcacao && conexao.vinculo.situacao && conexao.vinculo.situacao !== 'juntos') {
           <g class="conjugal-mark" [attr.data-situacao]="conexao.vinculo.situacao" [attr.transform]="'translate(' + conexao.marcacao.x + ',' + conexao.marcacao.y + ')'">
             <title>{{ conexao.descricao }}</title>
@@ -74,6 +78,9 @@
   <span><i class="union-symbol" aria-hidden="true"></i> União</span>
   <span><b aria-hidden="true">/</b> Separação</span>
   <span><b aria-hidden="true">//</b> Divórcio</span>
+  <span><b aria-hidden="true">═</b> Proximidade</span>
+  <span><b aria-hidden="true">∿</b> Conflito</span>
+  <span><b aria-hidden="true">···</b> Afastamento</span>
   <span><b aria-hidden="true">† ou ×</b> Pessoa falecida</span>
 </div>
 @if (diagrama().pessoas.length > 0) {

@@ -2,7 +2,7 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { GenogramaService } from '../genograma/genograma.service';
-import { ModalidadeFiliacao, ROTULOS_FILIACAO, ROTULOS_CONJUGAIS, SituacaoConjugal, TipoVinculo, Vinculo } from './vinculo.model';
+import { RelacaoEmocional, ROTULOS_EMOCIONAIS, ModalidadeFiliacao, ROTULOS_FILIACAO, ROTULOS_CONJUGAIS, SituacaoConjugal, TipoVinculo, Vinculo } from './vinculo.model';
 
 @Component({
   selector: 'app-vinculos',
@@ -18,6 +18,7 @@ export class VinculosComponent {
   readonly exclusaoId = signal<string | null>(null);
   readonly vinculoParaExcluir = computed(() => this.genograma.vinculos().find(vinculo => vinculo.id === this.exclusaoId()));
   readonly formulario = new FormGroup({
+    relacao: new FormControl<RelacaoEmocional>('proximidade', { nonNullable: true }),
     modalidade: new FormControl<ModalidadeFiliacao>('nao_informada', { nonNullable: true }),
     situacao: new FormControl<SituacaoConjugal>('juntos', { nonNullable: true }),
     tipo: new FormControl<TipoVinculo>('uniao', { nonNullable: true }),
@@ -53,11 +54,11 @@ export class VinculosComponent {
       this.erro.set('Selecione as duas pessoas para criar o vínculo.');
       return;
     }
-    const { tipo, origemId, destinoId, situacao, modalidade } = this.formulario.getRawValue();
-    const erro = this.genograma.adicionarVinculo(tipo, origemId, destinoId, tipo === 'uniao' ? situacao : undefined, tipo === 'filiacao' ? modalidade : undefined);
+    const { tipo, origemId, destinoId, situacao, modalidade, relacao } = this.formulario.getRawValue();
+    const erro = this.genograma.adicionarVinculo(tipo, origemId, destinoId, tipo === 'uniao' ? situacao : undefined, tipo === 'filiacao' ? modalidade : undefined, tipo === 'emocional' ? relacao : undefined);
     this.erro.set(erro ?? '');
     if (erro) return;
-    this.formulario.reset({ tipo, situacao, modalidade, origemId: '', destinoId: '' });
+    this.formulario.reset({ tipo, situacao, modalidade, relacao, origemId: '', destinoId: '' });
     this.mensagem.set('Vínculo adicionado.');
   }
 
@@ -68,6 +69,7 @@ export class VinculosComponent {
   descricao(vinculo: Vinculo): string {
     const origem = this.nomePessoa(vinculo.origemId);
     const destino = this.nomePessoa(vinculo.destinoId);
+    if (vinculo.tipo === 'emocional') return [origem, destino].join(' e ') + ' — ' + ROTULOS_EMOCIONAIS[vinculo.relacao!].toLowerCase();
     return vinculo.tipo === 'uniao' ? `${origem} e ${destino} — ${ROTULOS_CONJUGAIS[vinculo.situacao ?? 'juntos'].toLowerCase()}` : `${origem} → ${destino} — ${ROTULOS_FILIACAO[vinculo.modalidade ?? 'nao_informada'].toLowerCase()}`;
   }
 
@@ -83,6 +85,12 @@ export class VinculosComponent {
     const erro = this.genograma.alterarModalidadeFiliacao(vinculo.id, modalidade);
     this.erro.set(erro ?? '');
     this.mensagem.set(erro ? '' : 'Modalidade atualizada. Salve o genograma para guardar a alteração.');
+  }
+  alterarRelacao(vinculo: Vinculo, evento: Event): void {
+    const relacao = (evento.target as HTMLSelectElement).value as RelacaoEmocional;
+    const erro = this.genograma.alterarRelacaoEmocional(vinculo.id, relacao);
+    this.erro.set(erro ?? '');
+    this.mensagem.set(erro ? '' : 'Relação emocional atualizada. Salve o genograma para guardar a alteração.');
   }
   excluir(): void {
     const id = this.exclusaoId();

@@ -1,6 +1,6 @@
 ﻿import { Injectable, signal } from '@angular/core';
 import { Pessoa } from '../pessoas/pessoa.model';
-import { ModalidadeFiliacao, MODALIDADES_FILIACAO, SituacaoConjugal, SITUACOES_CONJUGAIS, TipoVinculo, Vinculo } from '../vinculos/vinculo.model';
+import { RelacaoEmocional, RELACOES_EMOCIONAIS, ModalidadeFiliacao, MODALIDADES_FILIACAO, SituacaoConjugal, SITUACOES_CONJUGAIS, TipoVinculo, Vinculo } from '../vinculos/vinculo.model';
 
 @Injectable({ providedIn: 'root' })
 export class GenogramaService {
@@ -32,14 +32,17 @@ export class GenogramaService {
     this.pessoasEstado.update(pessoas => pessoas.filter(pessoa => pessoa.id !== id));
   }
 
-  adicionarVinculo(tipo: TipoVinculo, origemId: string, destinoId: string, situacao?: SituacaoConjugal, modalidade?: ModalidadeFiliacao): string | null {
+  adicionarVinculo(tipo: TipoVinculo, origemId: string, destinoId: string, situacao?: SituacaoConjugal, modalidade?: ModalidadeFiliacao, relacao?: RelacaoEmocional): string | null {
+    if ((tipo === 'emocional' && (relacao === undefined || !RELACOES_EMOCIONAIS.includes(relacao))) || (tipo !== 'emocional' && relacao !== undefined)) {
+      return 'Selecione uma relação emocional válida apenas para o vínculo emocional.';
+    }
     if (modalidade !== undefined && (tipo !== 'filiacao' || !MODALIDADES_FILIACAO.includes(modalidade))) {
       return 'Selecione uma modalidade válida para o vínculo de filiação ou cuidado.';
     }
     if (situacao !== undefined && (tipo !== 'uniao' || !SITUACOES_CONJUGAIS.includes(situacao))) {
       return 'Selecione uma situação conjugal válida para a união.';
     }
-    if (tipo !== 'uniao' && tipo !== 'filiacao') return 'Selecione um tipo de vínculo válido.';
+    if (tipo !== 'uniao' && tipo !== 'filiacao' && tipo !== 'emocional') return 'Selecione um tipo de vínculo válido.';
     if (!this.pessoas().some(pessoa => pessoa.id === origemId) || !this.pessoas().some(pessoa => pessoa.id === destinoId)) {
       return 'Selecione duas pessoas cadastradas.';
     }
@@ -47,14 +50,14 @@ export class GenogramaService {
 
     const duplicado = this.vinculos().some(vinculo => vinculo.tipo === tipo && (
       (vinculo.origemId === origemId && vinculo.destinoId === destinoId) ||
-      (tipo === 'uniao' && vinculo.origemId === destinoId && vinculo.destinoId === origemId)
+      (tipo !== 'filiacao' && vinculo.origemId === destinoId && vinculo.destinoId === origemId)
     ));
     if (duplicado) return 'Este vínculo já foi cadastrado.';
     if (tipo === 'filiacao' && this.alcancaDescendente(destinoId, origemId)) {
       return 'Este vínculo criaria um ciclo entre responsáveis e pessoas vinculadas.';
     }
 
-    this.vinculosEstado.update(vinculos => [...vinculos, { id: crypto.randomUUID(), tipo, origemId, destinoId, ...(situacao ? { situacao } : {}), ...(modalidade ? { modalidade } : {}) }]);
+    this.vinculosEstado.update(vinculos => [...vinculos, { id: crypto.randomUUID(), tipo, origemId, destinoId, ...(situacao ? { situacao } : {}), ...(modalidade ? { modalidade } : {}), ...(relacao ? { relacao } : {}) }]);
     return null;
   }
 
@@ -73,6 +76,14 @@ export class GenogramaService {
       return 'O vínculo de filiação ou cuidado não foi encontrado.';
     }
     this.vinculosEstado.update(vinculos => vinculos.map(vinculo => vinculo.id === id ? { ...vinculo, modalidade } : vinculo));
+    return null;
+  }
+  alterarRelacaoEmocional(id: string, relacao: RelacaoEmocional): string | null {
+    if (!RELACOES_EMOCIONAIS.includes(relacao)) return 'Relação emocional inválida.';
+    if (!this.vinculos().some(vinculo => vinculo.id === id && vinculo.tipo === 'emocional')) {
+      return 'O vínculo emocional não foi encontrado.';
+    }
+    this.vinculosEstado.update(vinculos => vinculos.map(vinculo => vinculo.id === id ? { ...vinculo, relacao } : vinculo));
     return null;
   }
   removerVinculo(id: string): void {

@@ -51,4 +51,12 @@ describe('validarGenograma', () => {
     expect(() => validarGenograma({ ...base, vinculos: [{ id: 'f', tipo: 'filiacao', origemId: 'a', destinoId: 'b', modalidade: 'invalida' }] })).toThrow();
     expect(() => validarGenograma({ ...base, vinculos: [{ id: 'u', tipo: 'uniao', origemId: 'a', destinoId: 'b', modalidade: 'acolhimento' }] })).toThrow();
   });
+  it('deve recuperar relação emocional e rejeitar relação ausente, inválida ou aplicada à união', () => {
+    const vinculo = { id: 'e', tipo: 'emocional' as const, origemId: 'a', destinoId: 'b', relacao: 'conflito' as const };
+    expect(validarGenograma({ ...base, vinculos: [vinculo] }).vinculos).toEqual([vinculo]);
+    expect(() => validarGenograma({ ...base, vinculos: [{ ...vinculo, relacao: undefined }] })).toThrow();
+    expect(() => validarGenograma({ ...base, vinculos: [{ ...vinculo, relacao: 'invalida' }] })).toThrow();
+    expect(() => validarGenograma({ ...base, vinculos: [{ ...vinculo, tipo: 'uniao' }] })).toThrow();
+    expect(() => validarGenograma({ ...base, vinculos: [{ ...vinculo, modalidade: 'adocao' }] })).toThrow();
+  });
 });

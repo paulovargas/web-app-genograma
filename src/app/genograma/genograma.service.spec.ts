@@ -96,4 +96,27 @@ describe('GenogramaService', () => {
     expect(service.adicionarVinculo('uniao', 'c', 'd', undefined, 'adocao')).not.toBeNull();
     expect(service.alterarModalidadeFiliacao('inexistente', 'adocao')).not.toBeNull();
   });
+  it('deve permitir vínculo emocional junto de união e filiação sem afetar ciclos direcionados', () => {
+    service.adicionarVinculo('uniao', 'a', 'b');
+    service.adicionarVinculo('filiacao', 'a', 'b');
+    expect(service.adicionarVinculo('emocional', 'b', 'a', undefined, undefined, 'conflito')).toBeNull();
+    expect(service.adicionarVinculo('emocional', 'b', 'c', undefined, undefined, 'proximidade')).toBeNull();
+    expect(service.adicionarVinculo('emocional', 'c', 'a', undefined, undefined, 'afastamento')).toBeNull();
+    expect(service.adicionarVinculo('filiacao', 'b', 'a')).toContain('ciclo');
+    expect(service.adicionarVinculo('emocional', 'a', 'b', undefined, undefined, 'proximidade')).toContain('já foi cadastrado');
+  });
+
+  it('deve exigir relação emocional válida e preservá-la ao editar o vínculo', () => {
+    expect(service.adicionarVinculo('emocional', 'a', 'b')).not.toBeNull();
+    expect(service.adicionarVinculo('uniao', 'a', 'b', undefined, undefined, 'conflito')).not.toBeNull();
+    expect(service.adicionarVinculo('emocional', 'a', 'a', undefined, undefined, 'conflito')).not.toBeNull();
+    expect(service.adicionarVinculo('emocional', 'a', 'b', undefined, undefined, 'proximidade')).toBeNull();
+    const id = service.vinculos()[0].id;
+    expect(service.alterarRelacaoEmocional(id, 'afastamento')).toBeNull();
+    expect(service.vinculos()[0].id).toBe(id);
+    expect(service.vinculos()[0].relacao).toBe('afastamento');
+    expect(service.alterarRelacaoEmocional('inexistente', 'conflito')).not.toBeNull();
+    service.removerPessoa('a');
+    expect(service.vinculos()).toEqual([]);
+  });
 });

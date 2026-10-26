@@ -68,3 +68,13 @@ Os campos opcionais são preservados ao salvar e reabrir; não há alteração n
 ## Campo opcional da etapa 09
 
 `vinculos[].modalidade` aceita `nao_informada`, `adocao` ou `acolhimento`, apenas em `tipo: filiacao`. Ausência mantém a filiação não especificada dos registros antigos. O campo é preservado na gravação e na reabertura. Modalidade desconhecida ou aplicada a uma união é rejeitada. Nenhuma alteração de schema de primeiro nível da MockAPI é necessária.
+
+## Tipo de vínculo da etapa 10
+
+`tipo: emocional` exige `relacao: proximidade | conflito | afastamento`. Os campos `situacao` e `modalidade` não devem estar presentes nesse tipo. O campo `relacao` é rejeitado em união e filiação. Exemplo de objeto no array `vinculos`:
+
+```json
+{ "id": "emocional-a", "tipo": "emocional", "origemId": "pessoa-a", "destinoId": "pessoa-b", "relacao": "proximidade" }
+```
+
+A API continua recebendo o genograma completo. Relações emocionais são preservadas ao salvar e reabrir; os registros antigos seguem compatíveis sem alteração automática.

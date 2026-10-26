@@ -40,4 +40,11 @@ describe('construirDiagrama', () => {
     expect(diagrama.largura).toBeGreaterThan(0);
     expect(diagrama.altura).toBeGreaterThan(0);
   });
+  it('deve manter os níveis de gerações ao acrescentar vínculos emocionais', () => {
+    const estrutura = [filiacao('a', 'b')];
+    const semEmocional = construirDiagrama(pessoas, estrutura);
+    const comEmocional = construirDiagrama(pessoas, [...estrutura, { id: 'e', tipo: 'emocional', origemId: 'b', destinoId: 'a', relacao: 'proximidade' }]);
+    expect(comEmocional.pessoas).toEqual(semEmocional.pessoas);
+    expect(comEmocional.conexoes[1].descricao).toContain('Proximidade: b e a');
+  });
 });

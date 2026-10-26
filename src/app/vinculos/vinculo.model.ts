@@ -1,4 +1,7 @@
-﻿export type TipoVinculo = 'uniao' | 'filiacao';
+﻿export type TipoVinculo = 'uniao' | 'filiacao' | 'emocional';
+export type RelacaoEmocional = 'proximidade' | 'conflito' | 'afastamento';
+export const RELACOES_EMOCIONAIS: readonly RelacaoEmocional[] = ['proximidade', 'conflito', 'afastamento'];
+export const ROTULOS_EMOCIONAIS: Readonly<Record<RelacaoEmocional, string>> = { proximidade: 'Proximidade', conflito: 'Conflito', afastamento: 'Afastamento' };
 export type SituacaoConjugal = 'juntos' | 'separados' | 'divorciados';
 export type ModalidadeFiliacao = 'nao_informada' | 'adocao' | 'acolhimento';
 export const MODALIDADES_FILIACAO: readonly ModalidadeFiliacao[] = ['nao_informada', 'adocao', 'acolhimento'];
@@ -17,4 +20,5 @@ export interface Vinculo {
   readonly destinoId: string;
   readonly situacao?: SituacaoConjugal;
   readonly modalidade?: ModalidadeFiliacao;
+  readonly relacao?: RelacaoEmocional;
 }

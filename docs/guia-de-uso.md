@@ -70,3 +70,14 @@ Clique em **Salvar genograma** para guardar essas escolhas na API. Registros ant
 6. Clique em **Salvar genograma** para gravar na API.
 
 O acolhimento é apresentado como vínculo de cuidado. Vínculos antigos continuam não especificados, sem inferência de origem biológica. A descrição textual também informa a modalidade. Veja a [decisão sobre adoção e acolhimento](decisoes/003-adocao-e-acolhimento.md).
+
+## Vínculos emocionais (etapa 10)
+
+1. Em **Tipo de vínculo**, escolha **Emocional**.
+2. Selecione duas pessoas diferentes.
+3. Escolha **Proximidade**, **Conflito** ou **Afastamento** em **Relação emocional**.
+4. Clique em **Adicionar vínculo** para atualizar o diagrama.
+5. Para mudar a relação, use **Alterar relação emocional** na lista.
+6. Clique em **Salvar genograma** para persistir as alterações.
+
+Esses vínculos podem coexistir com união, filiação, adoção ou acolhimento. Não alteram as gerações e não têm direção nesta versão. A legenda diferencia os padrões; a descrição textual informa as relações por extenso. É permitida uma relação emocional atual por par de pessoas. Veja a [decisão 004](decisoes/004-vinculos-emocionais.md).
