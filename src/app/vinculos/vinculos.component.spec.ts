@@ -44,4 +44,20 @@ describe('VinculosComponent', () => {
     expect(service.vinculos()).toEqual([]);
     expect(service.pessoas().length).toBe(2);
   });
+  it('deve permitir atualizar a situação conjugal pela lista sem recriar a união', () => {
+    const service = TestBed.inject(GenogramaService);
+    for (const id of ['a', 'b']) service.salvarPessoa({ id, nome: id, nascimento: '', falecida: false });
+    service.adicionarVinculo('uniao', 'a', 'b');
+    const fixture = TestBed.createComponent(VinculosComponent);
+    fixture.detectChanges();
+    const select = fixture.nativeElement.querySelector('li select') as HTMLSelectElement;
+    const id = service.vinculos()[0].id;
+    select.value = 'divorciados';
+    select.dispatchEvent(new Event('change'));
+    fixture.detectChanges();
+    expect(service.vinculos().length).toBe(1);
+    expect(service.vinculos()[0].id).toBe(id);
+    expect(service.vinculos()[0].situacao).toBe('divorciados');
+    expect(fixture.nativeElement.textContent).toContain('a e b — divórcio');
+  });
 });

@@ -155,4 +155,26 @@ describe('PersistenciaComponent', () => {
     component.avisarAoSair(comRascunho as BeforeUnloadEvent);
     expect(comRascunho.defaultPrevented).toBeTrue();
   });
+  it('deve salvar e recuperar símbolo e situação conjugal no genograma completo', () => {
+    const fixture = criar();
+    const component = fixture.componentInstance;
+    const service = TestBed.inject(GenogramaService);
+    service.salvarPessoa({ id: 'a', nome: 'A', nascimento: '', falecida: false, simbolo: 'quadrado' });
+    service.salvarPessoa({ id: 'b', nome: 'B', nascimento: '', falecida: false, simbolo: 'losango' });
+    service.adicionarVinculo('uniao', 'a', 'b', 'divorciados');
+    component.salvar();
+    const request = http.expectOne({ method: 'POST', url: GENOGRAMAS_URL });
+    expect(request.request.body.pessoas[0].simbolo).toBe('quadrado');
+    expect(request.request.body.vinculos[0].situacao).toBe('divorciados');
+    const salvo = { ...request.request.body, id: 'novo' };
+    request.flush(salvo);
+    http.expectOne(GENOGRAMAS_URL).flush([salvo]);
+    component.solicitar('novo');
+    component.selecionado.setValue('novo');
+    component.solicitar('abrir');
+    http.expectOne(GENOGRAMAS_URL + '/novo').flush(salvo);
+    expect(service.pessoas()[0].simbolo).toBe('quadrado');
+    expect(service.pessoas()[1].simbolo).toBe('losango');
+    expect(service.vinculos()[0].situacao).toBe('divorciados');
+  });
 });

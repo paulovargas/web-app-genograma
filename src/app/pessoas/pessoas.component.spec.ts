@@ -47,7 +47,7 @@ describe('PessoasComponent', () => {
   it('deve preservar o identificador ao editar e descartar alterações ao cancelar', () => {
     const component = criar().componentInstance;
     component.novaPessoa();
-    component.formulario.setValue({ nome: 'Ana', nascimento: '1980-02-03', falecida: false });
+    component.formulario.setValue({ nome: 'Ana', nascimento: '1980-02-03', falecida: false, simbolo: 'neutro' });
     component.salvar();
     const id = component.pessoas()[0].id;
     component.editar(component.pessoas()[0]);
@@ -102,5 +102,22 @@ describe('PessoasComponent', () => {
     component.novaPessoa();
     expect(component.exclusaoId()).toBeNull();
     expect(component.formularioAberto()).toBeTrue();
+  });
+  it('deve cadastrar e editar o símbolo sem inferir pelo nome', () => {
+    const fixture = criar();
+    const component = fixture.componentInstance;
+    component.novaPessoa();
+    component.formulario.patchValue({ nome: 'Nome fictício', simbolo: 'losango' });
+    component.salvar();
+    expect(component.pessoas()[0].simbolo).toBe('losango');
+    component.editar(component.pessoas()[0]);
+    expect(component.formulario.controls.simbolo.value).toBe('losango');
+    component.formulario.controls.simbolo.setValue('circulo');
+    component.salvar();
+    expect(component.pessoas()[0].simbolo).toBe('circulo');
+    component.editar(component.pessoas()[0]);
+    component.formulario.controls.simbolo.setValue('neutro');
+    component.salvar();
+    expect(component.pessoas()[0].simbolo).toBeUndefined();
   });
 });

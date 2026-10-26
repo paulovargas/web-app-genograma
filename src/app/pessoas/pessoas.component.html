@@ -16,6 +16,10 @@
       }
       <label for="nascimento">Nascimento <span>(opcional)</span></label>
       <input id="nascimento" type="date" formControlName="nascimento">
+      <label for="simbolo">Símbolo da pessoa</label>
+      <select id="simbolo" formControlName="simbolo" aria-describedby="simbolo-ajuda">
+        <option value="neutro">Neutro (cartão)</option><option value="quadrado">Quadrado</option><option value="circulo">Círculo</option><option value="losango">Losango</option>
+      </select><p id="simbolo-ajuda">Escolha a representação visual desta pessoa.</p>
       <label class="checkbox"><input type="checkbox" formControlName="falecida"> Pessoa falecida</label>
       <div class="actions">
         <button type="submit" class="primary">Salvar</button>

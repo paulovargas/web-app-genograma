@@ -14,3 +14,5 @@ input:not([type=checkbox]) { width: 100%; min-width: 0; padding: 9px; border: 1p
 ul { list-style: none; padding: 0; margin: 20px 0 0; } li { padding: 16px 0; border-top: 1px solid #dce4df; } strong { display: block; font-size: 13px; overflow-wrap: anywhere; } small { display: block; }
 .empty { text-align: center; padding: 25px 0; }
 h3 { overflow-wrap: anywhere; }
+
+select { width: 100%; padding: 9px; border: 1px solid #a8bbae; border-radius: 5px; background: white; color: #293f34; font: inherit; font-size: 13px; } select:focus-visible { outline: 3px solid #307d67; outline-offset: 2px; }

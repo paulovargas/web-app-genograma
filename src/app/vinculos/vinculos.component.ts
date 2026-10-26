@@ -2,7 +2,7 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { GenogramaService } from '../genograma/genograma.service';
-import { TipoVinculo, Vinculo } from './vinculo.model';
+import { ROTULOS_CONJUGAIS, SituacaoConjugal, TipoVinculo, Vinculo } from './vinculo.model';
 
 @Component({
   selector: 'app-vinculos',
@@ -18,6 +18,7 @@ export class VinculosComponent {
   readonly exclusaoId = signal<string | null>(null);
   readonly vinculoParaExcluir = computed(() => this.genograma.vinculos().find(vinculo => vinculo.id === this.exclusaoId()));
   readonly formulario = new FormGroup({
+    situacao: new FormControl<SituacaoConjugal>('juntos', { nonNullable: true }),
     tipo: new FormControl<TipoVinculo>('uniao', { nonNullable: true }),
     origemId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     destinoId: new FormControl('', { nonNullable: true, validators: [Validators.required] })
@@ -51,11 +52,11 @@ export class VinculosComponent {
       this.erro.set('Selecione as duas pessoas para criar o vínculo.');
       return;
     }
-    const { tipo, origemId, destinoId } = this.formulario.getRawValue();
-    const erro = this.genograma.adicionarVinculo(tipo, origemId, destinoId);
+    const { tipo, origemId, destinoId, situacao } = this.formulario.getRawValue();
+    const erro = this.genograma.adicionarVinculo(tipo, origemId, destinoId, tipo === 'uniao' ? situacao : undefined);
     this.erro.set(erro ?? '');
     if (erro) return;
-    this.formulario.reset({ tipo, origemId: '', destinoId: '' });
+    this.formulario.reset({ tipo, situacao, origemId: '', destinoId: '' });
     this.mensagem.set('Vínculo adicionado.');
   }
 
@@ -66,7 +67,14 @@ export class VinculosComponent {
   descricao(vinculo: Vinculo): string {
     const origem = this.nomePessoa(vinculo.origemId);
     const destino = this.nomePessoa(vinculo.destinoId);
-    return vinculo.tipo === 'uniao' ? `${origem} e ${destino} — união` : `${origem} → ${destino} — responsável e descendente`;
+    return vinculo.tipo === 'uniao' ? `${origem} e ${destino} — ${ROTULOS_CONJUGAIS[vinculo.situacao ?? 'juntos'].toLowerCase()}` : `${origem} → ${destino} — responsável e descendente`;
+  }
+
+  alterarSituacao(vinculo: Vinculo, evento: Event): void {
+    const situacao = (evento.target as HTMLSelectElement).value as SituacaoConjugal;
+    const erro = this.genograma.alterarSituacaoUniao(vinculo.id, situacao);
+    this.erro.set(erro ?? '');
+    this.mensagem.set(erro ? '' : 'Situação conjugal atualizada. Salve o genograma para guardar a alteração.');
   }
 
   excluir(): void {

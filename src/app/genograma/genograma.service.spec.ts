@@ -60,4 +60,20 @@ describe('GenogramaService', () => {
     expect(service.vinculos()[0].tipo).toBe('filiacao');
     expect(service.pessoas().length).toBe(4);
   });
+  it('deve alterar a situação da união preservando o vínculo e bloquear duplicata invertida', () => {
+    expect(service.adicionarVinculo('uniao', 'a', 'b', 'separados')).toBeNull();
+    const id = service.vinculos()[0].id;
+    expect(service.adicionarVinculo('uniao', 'b', 'a', 'divorciados')).toContain('já foi cadastrado');
+    expect(service.alterarSituacaoUniao(id, 'divorciados')).toBeNull();
+    expect(service.vinculos()[0].id).toBe(id);
+    expect(service.vinculos()[0].situacao).toBe('divorciados');
+    expect(service.alterarSituacaoUniao(id, 'juntos')).toBeNull();
+    expect(service.vinculos()[0].situacao).toBe('juntos');
+  });
+
+  it('deve rejeitar situação conjugal em filiação e atualização de vínculo inexistente', () => {
+    expect(service.adicionarVinculo('filiacao', 'a', 'b', 'separados')).not.toBeNull();
+    expect(service.alterarSituacaoUniao('inexistente', 'divorciados')).not.toBeNull();
+    expect(service.vinculos()).toEqual([]);
+  });
 });

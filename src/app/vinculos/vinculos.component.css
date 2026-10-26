@@ -11,3 +11,7 @@ button:focus-visible, select:focus-visible { outline: 3px solid #307d67; outline
 ul { list-style: none; padding: 0; margin: 20px 0 0; } li { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 12px 0; border-top: 1px solid #dce4df; } li span { overflow-wrap: anywhere; min-width: 0; }
 .notice { background: #f4f7f2; padding: 16px; border-radius: 8px; overflow-wrap: anywhere; } .notice button { margin: 4px 8px 0 0; } .error { color: #a32929; } p:empty { display: none; }
 @media (max-width: 640px) { .fields { grid-template-columns: 1fr; } header { align-items: flex-start; flex-direction: column; } section { padding: 18px; } }
+
+li > div { min-width: 0; overflow-wrap: anywhere; } li > div label { display: block; margin-top: 10px; } form > button { margin-top: 12px; }
+
+form > button + button { margin-left: 8px; }

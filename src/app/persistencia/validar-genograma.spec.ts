@@ -1,4 +1,5 @@
-﻿import { validarGenograma } from './validar-genograma';
+﻿import { GenogramaSalvo } from './genograma.model';
+import { validarGenograma } from './validar-genograma';
 
 describe('validarGenograma', () => {
   const pessoas = ['a', 'b', 'c'].map(id => ({ id, nome: id, nascimento: '', falecida: false }));
@@ -22,5 +23,19 @@ describe('validarGenograma', () => {
   it('deve preservar identificadores dos vínculos ao carregar dados válidos', () => {
     const vinculos = [{ id: 'original', tipo: 'filiacao' as const, origemId: 'a', destinoId: 'b' }];
     expect(validarGenograma({ ...base, vinculos }).vinculos).toEqual(vinculos);
+  });
+  it('deve abrir registros antigos sem símbolo nem situação e preservar os novos campos', () => {
+    expect(validarGenograma(base)).toEqual(base);
+    const atualizado: GenogramaSalvo = { ...base,
+      pessoas: pessoas.map((pessoa, indice) => ({ ...pessoa, simbolo: indice === 0 ? 'quadrado' : 'circulo' })),
+      vinculos: [{ id: 'u', tipo: 'uniao', origemId: 'a', destinoId: 'b', situacao: 'divorciados' }]
+    };
+    expect(validarGenograma(atualizado)).toEqual(atualizado);
+  });
+
+  it('deve rejeitar símbolos e situações desconhecidas sem aceitar situação em filiação', () => {
+    expect(() => validarGenograma({ ...base, pessoas: [{ ...pessoas[0], simbolo: 'invalido' }] })).toThrow();
+    expect(() => validarGenograma({ ...base, vinculos: [{ id: 'u', tipo: 'uniao', origemId: 'a', destinoId: 'b', situacao: 'invalida' }] })).toThrow();
+    expect(() => validarGenograma({ ...base, vinculos: [{ id: 'f', tipo: 'filiacao', origemId: 'a', destinoId: 'b', situacao: 'separados' }] })).toThrow();
   });
 });

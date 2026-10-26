@@ -2,7 +2,7 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { GenogramaService } from '../genograma/genograma.service';
-import { Pessoa } from './pessoa.model';
+import { Pessoa, SimboloPessoa } from './pessoa.model';
 
 @Component({
   selector: 'app-pessoas',
@@ -23,6 +23,7 @@ export class PessoasComponent {
   readonly formulario = new FormGroup({
     nome: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.pattern(/\S/)] }),
     nascimento: new FormControl('', { nonNullable: true }),
+    simbolo: new FormControl<SimboloPessoa>('neutro', { nonNullable: true }),
     falecida: new FormControl(false, { nonNullable: true })
   });
 
@@ -52,7 +53,7 @@ export class PessoasComponent {
     this.exclusaoId.set(null);
     this.mensagem.set('');
     this.editandoId.set(pessoa.id);
-    this.formulario.reset({ nome: pessoa.nome, nascimento: pessoa.nascimento, falecida: pessoa.falecida });
+    this.formulario.reset({ nome: pessoa.nome, nascimento: pessoa.nascimento, falecida: pessoa.falecida, simbolo: pessoa.simbolo ?? 'neutro' });
     this.formularioAberto.set(true);
   }
 
@@ -60,9 +61,9 @@ export class PessoasComponent {
     this.formulario.markAllAsTouched();
     if (this.formulario.invalid) return;
 
-    const dados = this.formulario.getRawValue();
+    const { simbolo, ...dados } = this.formulario.getRawValue();
     const editandoId = this.editandoId();
-    const pessoa: Pessoa = { ...dados, nome: dados.nome.trim(), id: editandoId ?? crypto.randomUUID() };
+    const pessoa: Pessoa = { ...dados, ...(simbolo !== 'neutro' ? { simbolo } : {}), nome: dados.nome.trim(), id: editandoId ?? crypto.randomUUID() };
     this.genograma.salvarPessoa(pessoa);
     this.cancelar();
     this.mensagem.set(editandoId ? 'Pessoa atualizada.' : 'Pessoa adicionada.');

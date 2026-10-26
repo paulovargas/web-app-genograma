@@ -22,6 +22,9 @@
           </select>
         </label>
       </div>
+      @if (formulario.controls.tipo.value === 'uniao') {
+        <label>Situação conjugal<select formControlName="situacao"><option value="juntos">União</option><option value="separados">Separação</option><option value="divorciados">Divórcio</option></select></label>
+      }
       <button type="submit" class="primary">Adicionar vínculo</button>
       <button type="button" (click)="cancelar()">Limpar formulário</button>
     </form>
@@ -38,7 +41,11 @@
   }
   <ul>
     @for (vinculo of genograma.vinculos(); track vinculo.id) {
-      <li><span>{{ descricao(vinculo) }}</span><button type="button" (click)="exclusaoId.set(vinculo.id)" [attr.aria-label]="'Remover vínculo: ' + descricao(vinculo)">Remover</button></li>
+      <li><div><span>{{ descricao(vinculo) }}</span>
+        @if (vinculo.tipo === 'uniao') {
+          <label>Alterar situação conjugal<select [value]="vinculo.situacao ?? 'juntos'" (change)="alterarSituacao(vinculo, $event)" [attr.aria-label]="'Situação conjugal: ' + nomePessoa(vinculo.origemId) + ' e ' + nomePessoa(vinculo.destinoId)"><option value="juntos">União</option><option value="separados">Separação</option><option value="divorciados">Divórcio</option></select></label>
+        }
+      </div><button type="button" (click)="exclusaoId.set(vinculo.id)" [attr.aria-label]="'Remover vínculo: ' + descricao(vinculo)">Remover</button></li>
     } @empty { <li>Nenhum vínculo cadastrado.</li> }
   </ul>
 </section>

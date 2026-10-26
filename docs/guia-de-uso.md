@@ -51,3 +51,11 @@ Erros de carregamento preservam o editor atual. Se a confirmação de salvamento
 - Navegação real no Chrome: primeiro Tab, atalho para o editor, campo de nome, mensagem de formulário pendente e cancelamento da confirmação sem perder o formulário.
 - Tela conferida em desktop e viewport de 390 × 844, com mensagens legíveis e sem rolagem horizontal da página. Console sem erros durante a revisão.
 - Esta revisão usa HTTP simulado nos testes integrados e dados fictícios locais na inspeção visual. O teste de gravação real na API foi realizado na etapa 06 e está registrado em `persistencia-api.md`.
+
+## Símbolos de pessoa e situações conjugais (etapa 08)
+
+No cadastro ou na edição de uma pessoa, escolha o **Símbolo da pessoa**: neutro, quadrado, círculo ou losango. O símbolo aparece no cartão e a descrição textual informa a escolha. A opção neutra remove a representação adicional. Pessoas falecidas possuem indicação textual e X sobre o símbolo, quando há uma forma escolhida.
+
+Ao adicionar uma união, escolha a **Situação conjugal**. Separação aparece com um traço diagonal e divórcio com dois traços na linha da união. Para mudar uma união existente, use **Alterar situação conjugal** na lista de vínculos. Não é necessário remover o vínculo nem as pessoas.
+
+Clique em **Salvar genograma** para guardar essas escolhas na API. Registros antigos sem os campos novos continuam abrindo normalmente. O app registra uma situação atual por par de pessoas, sem histórico ou datas de mudança.

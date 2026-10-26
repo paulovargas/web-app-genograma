@@ -31,3 +31,7 @@ A área de rolagem recebe foco pelo teclado, os controles têm nomes acessíveis
 - Não há arraste, posicionamento manual, exportação nem otimização de cruzamentos.
 - Famílias extensas podem produzir diagramas largos e linhas sobrepostas. O layout prioriza a ordem de gerações e a separação dos cartões, sem garantir ausência de cruzamentos entre conexões.
 - Uma biblioteca de layout poderá ser avaliada quando os requisitos exigirem posicionamento mais elaborado.
+
+## Evolução da decisão — etapa 08
+
+A decisão 001 continua válida para SVG e organização por gerações. A etapa 08 acrescenta símbolos escolhidos pelo usuário e marcações de separação e divórcio. Consulte a [decisão 002](002-simbolos-e-situacao-conjugal.md), que complementa a convenção visual inicial.

@@ -57,3 +57,10 @@ As requisições têm limite de espera de 15 segundos. Não há repetição auto
 - Conferência visual em desktop e celular pendente.
 
 Revisão da etapa 07: formulários pendentes precisam ser concluídos ou cancelados antes de salvar o conjunto. O descarte considera esses rascunhos e o navegador é instruído a avisar ao sair com alterações pendentes. Consulte o [guia de uso](guia-de-uso.md).
+
+## Campos opcionais da etapa 08
+
+- `pessoas[].simbolo`: `neutro`, `quadrado`, `circulo` ou `losango`. Ausente significa representação neutra.
+- `vinculos[].situacao`: `juntos`, `separados` ou `divorciados`, exclusivo de `tipo: uniao`. Ausente significa união sem marca de separação ou divórcio.
+
+Os campos opcionais são preservados ao salvar e reabrir; não há alteração no recurso MockAPI nem migração dos registros existentes. Situações conjugais em filiação e valores desconhecidos são rejeitados. Ver [decisão 002](decisoes/002-simbolos-e-situacao-conjugal.md).

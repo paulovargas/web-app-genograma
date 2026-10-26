@@ -1,5 +1,5 @@
 ﻿import { Pessoa } from '../pessoas/pessoa.model';
-import { Vinculo } from '../vinculos/vinculo.model';
+import { ROTULOS_CONJUGAIS, Vinculo } from '../vinculos/vinculo.model';
 
 export interface PessoaNo {
   readonly pessoa: Pessoa;
@@ -12,6 +12,7 @@ export interface Conexao {
   readonly vinculo: Vinculo;
   readonly caminho: string;
   readonly descricao: string;
+  readonly marcacao?: { readonly x: number; readonly y: number };
 }
 
 export interface Diagrama {
@@ -24,12 +25,12 @@ export interface Diagrama {
 export const LARGURA_CARTAO = 160;
 export const ALTURA_CARTAO = 100;
 
-function linhasDoNome(nome: string): readonly string[] {
+function linhasDoNome(nome: string, limite = 21): readonly string[] {
   const caracteres = Array.from(nome);
-  if (caracteres.length <= 21) return [nome];
-  const primeira = caracteres.slice(0, 21).join('');
-  const restante = caracteres.slice(21);
-  return [primeira, restante.length > 21 ? restante.slice(0, 20).join('') + '…' : restante.join('')];
+  if (caracteres.length <= limite) return [nome];
+  const primeira = caracteres.slice(0, limite).join('');
+  const restante = caracteres.slice(limite);
+  return [primeira, restante.length > limite ? restante.slice(0, limite - 1).join('') + '…' : restante.join('')];
 }
 
 export function construirDiagrama(pessoas: readonly Pessoa[], vinculos: readonly Vinculo[]): Diagrama {
@@ -70,13 +71,14 @@ export function construirDiagrama(pessoas: readonly Pessoa[], vinculos: readonly
   const nos: PessoaNo[] = [];
   for (const [nivel, linha] of linhas) {
     const inicio = (largura - (linha.length - 1) * 210 - LARGURA_CARTAO) / 2;
-    linha.forEach((pessoa, indice) => nos.push({ pessoa, x: inicio + indice * 210, y: 55 + nivel * 210, linhasNome: linhasDoNome(pessoa.nome) }));
+    linha.forEach((pessoa, indice) => nos.push({ pessoa, x: inicio + indice * 210, y: 55 + nivel * 210, linhasNome: linhasDoNome(pessoa.nome, pessoa.simbolo && pessoa.simbolo !== 'neutro' ? 15 : 21) }));
   }
   const porId = new Map(nos.map(no => [no.pessoa.id, no]));
   const conexoes = validos.map(vinculo => {
     const origem = porId.get(vinculo.origemId)!;
     const destino = porId.get(vinculo.destinoId)!;
     let caminho: string;
+    let marcacao: { x: number; y: number } | undefined;
     if (vinculo.tipo === 'filiacao') {
       const x1 = origem.x + LARGURA_CARTAO / 2;
       const y1 = origem.y + ALTURA_CARTAO;
@@ -91,16 +93,18 @@ export function construirDiagrama(pessoas: readonly Pessoa[], vinculos: readonly
       const x2 = direita.x + LARGURA_CARTAO / 2;
       const topo = origem.y - 30;
       caminho = `M ${x1} ${origem.y} V ${topo} H ${x2} V ${destino.y}`;
+      marcacao = { x: (x1 + x2) / 2, y: topo };
     } else {
       const x1 = origem.x + LARGURA_CARTAO;
       const x2 = destino.x + LARGURA_CARTAO;
       const lado = Math.max(x1, x2) + 25;
       caminho = `M ${x1} ${origem.y + 30} H ${lado} V ${destino.y + 30} H ${x2}`;
+      marcacao = { x: lado, y: (origem.y + destino.y) / 2 + 30 };
     }
     return {
-      vinculo, caminho,
+      vinculo, caminho, marcacao,
       descricao: vinculo.tipo === 'uniao'
-        ? `União: ${origem.pessoa.nome} e ${destino.pessoa.nome}`
+        ? `${ROTULOS_CONJUGAIS[vinculo.situacao ?? 'juntos']}: ${origem.pessoa.nome} e ${destino.pessoa.nome}`
         : `Filiação: ${origem.pessoa.nome} é responsável por ${destino.pessoa.nome}`
     };
   });

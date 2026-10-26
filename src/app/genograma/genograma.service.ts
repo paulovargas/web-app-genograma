@@ -1,6 +1,6 @@
 ﻿import { Injectable, signal } from '@angular/core';
 import { Pessoa } from '../pessoas/pessoa.model';
-import { TipoVinculo, Vinculo } from '../vinculos/vinculo.model';
+import { SituacaoConjugal, SITUACOES_CONJUGAIS, TipoVinculo, Vinculo } from '../vinculos/vinculo.model';
 
 @Injectable({ providedIn: 'root' })
 export class GenogramaService {
@@ -32,7 +32,10 @@ export class GenogramaService {
     this.pessoasEstado.update(pessoas => pessoas.filter(pessoa => pessoa.id !== id));
   }
 
-  adicionarVinculo(tipo: TipoVinculo, origemId: string, destinoId: string): string | null {
+  adicionarVinculo(tipo: TipoVinculo, origemId: string, destinoId: string, situacao?: SituacaoConjugal): string | null {
+    if (situacao !== undefined && (tipo !== 'uniao' || !SITUACOES_CONJUGAIS.includes(situacao))) {
+      return 'Selecione uma situação conjugal válida para a união.';
+    }
     if (tipo !== 'uniao' && tipo !== 'filiacao') return 'Selecione um tipo de vínculo válido.';
     if (!this.pessoas().some(pessoa => pessoa.id === origemId) || !this.pessoas().some(pessoa => pessoa.id === destinoId)) {
       return 'Selecione duas pessoas cadastradas.';
@@ -48,7 +51,16 @@ export class GenogramaService {
       return 'Esta filiação criaria um ciclo de ancestralidade.';
     }
 
-    this.vinculosEstado.update(vinculos => [...vinculos, { id: crypto.randomUUID(), tipo, origemId, destinoId }]);
+    this.vinculosEstado.update(vinculos => [...vinculos, { id: crypto.randomUUID(), tipo, origemId, destinoId, ...(situacao ? { situacao } : {}) }]);
+    return null;
+  }
+
+  alterarSituacaoUniao(id: string, situacao: SituacaoConjugal): string | null {
+    if (!SITUACOES_CONJUGAIS.includes(situacao)) return 'Situação conjugal inválida.';
+    if (!this.vinculos().some(vinculo => vinculo.id === id && vinculo.tipo === 'uniao')) {
+      return 'A união não foi encontrada.';
+    }
+    this.vinculosEstado.update(vinculos => vinculos.map(vinculo => vinculo.id === id ? { ...vinculo, situacao } : vinculo));
     return null;
   }
 

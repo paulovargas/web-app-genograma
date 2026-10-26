@@ -12,7 +12,13 @@ A persistência usa MockAPI com salvamento manual de cada genograma completo. Di
 
 Pessoas e vínculos aparecem automaticamente no diagrama. Filiações usam setas e uniões usam linhas tracejadas. Ajuste o zoom ou use a rolagem para explorar famílias maiores. A descrição textual abaixo do diagrama apresenta os nomes completos e as conexões.
 
-Os cartões usam símbolos neutros. Consulte a [decisão sobre o diagrama](docs/decisoes/001-diagrama-svg.md) para conhecer a convenção visual e as limitações.
+Os cartões usam a representação escolhida no cadastro; sem escolha, permanecem neutros. Consulte a [decisão sobre o diagrama](docs/decisoes/001-diagrama-svg.md) para conhecer a convenção visual e as limitações.
+
+## Símbolos e situações conjugais
+
+No cadastro de pessoas, escolha **Neutro**, **Quadrado**, **Círculo** ou **Losango**. Ao criar uma união, selecione **União**, **Separação** ou **Divórcio**. A situação também pode ser alterada na lista de vínculos e aparece no diagrama e na descrição textual. Salve o genograma após as alterações.
+
+Genogramas antigos continuam compatíveis. Veja a [decisão sobre símbolos e situações conjugais](docs/decisoes/002-simbolos-e-situacao-conjugal.md).
 
 ## Salvar e reabrir
 

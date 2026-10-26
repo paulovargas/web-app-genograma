@@ -20,6 +20,12 @@ O escopo abaixo é uma proposta inicial, que pode ser refinada antes de cada eta
 
 Situação: etapas 01 a 04 implementadas; etapa 06 antecipada e implementada com MockAPI. Etapas 05 e 07 concluídas. Primeiro fluxo revisado, com suíte automatizada aprovada e conferência visual e de teclado no Chrome em desktop e celular de 390 px.
 
+## Evoluções após o primeiro fluxo
+
+| Etapa | Entrega | Critérios de conclusão | Commit sugerido |
+| --- | --- | --- | --- |
+| 08 | Símbolos e situações conjugais | Escolher quadrado, círculo ou losango; representar separação e divórcio; salvar e reabrir mantendo compatibilidade | `feat: amplia simbolos e situacoes conjugais` |
+
 ## Modelo inicial proposto
 
 - Genograma: identificador, título, pessoas e vínculos.
@@ -188,4 +194,29 @@ Resultado final da validação da etapa 07:
 - `npm.cmd run build`: aprovado sem avisos.
 - `npx.cmd tsc -p tsconfig.spec.json --noEmit`: aprovado.
 - `npm.cmd test -- --watch=false --browsers=ChromeHeadless`: 36 testes aprovados.
+- `git diff --check`: aprovado.
+
+## Entrega da etapa 08 — 26/10/2026
+
+Escopo escolhido pelo usuário: quadrado, círculo, losango, separação e divórcio.
+
+- Símbolo selecionável no cadastro e na edição, mantendo opção neutra.
+- Situação conjugal ao criar uma união ou editar sua situação pela lista.
+- Diagrama com formas, indicação de falecimento e marcações de um ou dois traços para separação ou divórcio.
+- Legenda, descrição textual, modelos e validação de dados atualizados.
+- Uma união por par, independente da situação; filiação preserva suas regras de ancestralidade.
+- Persistência dos novos campos opcionais e abertura de registros antigos sem migração.
+- Conferência visual no Chrome com três pessoas fictícias, separação e divórcio; mudança pela lista e layout de 390 × 844 verificados, sem alargar a página nem apresentar erros no console. Os dados de conferência ficaram locais, sem alteração dos registros da API.
+
+Decisão registrada em [símbolos e situação conjugal](decisoes/002-simbolos-e-situacao-conjugal.md).
+
+Commit sugerido: `feat: amplia simbolos e situacoes conjugais`.
+
+Situação da etapa 08: concluída.
+
+Validação final:
+
+- `npm.cmd run build`: aprovado sem avisos.
+- `npm.cmd test -- --watch=false --browsers=ChromeHeadless`: 44 testes aprovados, incluindo gravação e reabertura dos novos campos com HTTP simulado.
+- Compilação TypeScript da suíte aprovada.
 - `git diff --check`: aprovado.

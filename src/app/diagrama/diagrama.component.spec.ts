@@ -58,4 +58,24 @@ describe('DiagramaComponent', () => {
     buttons.find(button => button.textContent === 'Restaurar')!.click();
     expect(component.zoom()).toBe(100);
   });
+  it('deve representar os símbolos e atualizar separação e divórcio na visualização', () => {
+    const fixture = TestBed.createComponent(DiagramaComponent);
+    const service = TestBed.inject(GenogramaService);
+    service.salvarPessoa({ id: 'a', nome: 'A', nascimento: '', falecida: false, simbolo: 'quadrado' });
+    service.salvarPessoa({ id: 'b', nome: 'B', nascimento: '', falecida: true, simbolo: 'circulo' });
+    service.salvarPessoa({ id: 'c', nome: 'C', nascimento: '', falecida: false, simbolo: 'losango' });
+    service.adicionarVinculo('uniao', 'a', 'b', 'separados');
+    fixture.detectChanges();
+    const element = fixture.nativeElement as HTMLElement;
+    expect(element.querySelector('[data-simbolo="quadrado"] rect')).not.toBeNull();
+    expect(element.querySelector('[data-simbolo="circulo"] circle')).not.toBeNull();
+    expect(element.querySelector('[data-simbolo="losango"] polygon')).not.toBeNull();
+    expect(element.querySelector('[data-simbolo="circulo"] .deceased')).not.toBeNull();
+    expect(element.querySelector('[data-situacao="separados"]')).not.toBeNull();
+    service.alterarSituacaoUniao(service.vinculos()[0].id, 'divorciados');
+    fixture.detectChanges();
+    expect(element.querySelector('[data-situacao="divorciados"]')).not.toBeNull();
+    expect(element.querySelector('details')?.textContent).toContain('Divórcio: A e B');
+    expect(element.querySelector('details')?.textContent).toContain('símbolo: Quadrado');
+  });
 });

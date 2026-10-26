@@ -22,6 +22,7 @@
       role="img" [attr.aria-label]="'Genograma com ' + diagrama().pessoas.length + ' pessoas e ' + diagrama().conexoes.length + ' vínculos. Consulte também a descrição textual abaixo.'">
       <defs>
         <clipPath id="limite-nome" clipPathUnits="userSpaceOnUse"><rect x="12" y="10" width="136" height="36" /></clipPath>
+        <clipPath id="limite-nome-simbolo" clipPathUnits="userSpaceOnUse"><rect x="12" y="10" width="100" height="36" /></clipPath>
         <marker id="seta-filiacao" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
           <path d="M 0 0 L 10 5 L 0 10 z" fill="#326e58" />
         </marker>
@@ -31,13 +32,30 @@
           [attr.marker-end]="conexao.vinculo.tipo === 'filiacao' ? 'url(#seta-filiacao)' : null">
           <title>{{ conexao.descricao }}</title>
         </path>
+        @if (conexao.marcacao && conexao.vinculo.situacao && conexao.vinculo.situacao !== 'juntos') {
+          <g class="conjugal-mark" [attr.data-situacao]="conexao.vinculo.situacao" [attr.transform]="'translate(' + conexao.marcacao.x + ',' + conexao.marcacao.y + ')'">
+            <title>{{ conexao.descricao }}</title>
+            <rect x="-12" y="-10" width="24" height="20" />
+            @if (conexao.vinculo.situacao === 'divorciados') {
+              <path d="M -9 7 L 1 -7 M -1 7 L 9 -7" />
+            } @else { <path d="M -5 7 L 5 -7" /> }
+          </g>
+        }
       }
       @for (no of diagrama().pessoas; track no.pessoa.id) {
         <g class="person" [attr.transform]="'translate(' + no.x + ',' + no.y + ')'" [attr.data-pessoa-id]="no.pessoa.id">
-          <title>{{ no.pessoa.nome }}{{ no.pessoa.falecida ? ' — pessoa falecida' : '' }}{{ no.pessoa.nascimento ? ' — nascimento: ' + no.pessoa.nascimento : '' }}</title>
+          <title>{{ no.pessoa.nome }} — {{ rotulosSimbolos[no.pessoa.simbolo ?? 'neutro'] }}{{ no.pessoa.falecida ? ' — pessoa falecida' : '' }}{{ no.pessoa.nascimento ? ' — nascimento: ' + no.pessoa.nascimento : '' }}</title>
           <rect width="160" height="100" rx="10" />
+          <g class="person-symbol" [attr.data-simbolo]="no.pessoa.simbolo ?? 'neutro'">
+            @switch (no.pessoa.simbolo) {
+              @case ('quadrado') { <rect x="122" y="14" width="20" height="20" /> }
+              @case ('circulo') { <circle cx="132" cy="24" r="10" /> }
+              @case ('losango') { <polygon points="132,12 144,24 132,36 120,24" /> }
+            }
+            @if (no.pessoa.falecida && no.pessoa.simbolo && no.pessoa.simbolo !== 'neutro') { <path class="deceased" d="M 119 11 L 145 37 M 119 37 L 145 11" /> }
+          </g>
           @for (linha of no.linhasNome; track $index) {
-            <text x="12" [attr.y]="24 + $index * 17" class="name" clip-path="url(#limite-nome)">{{ linha }}</text>
+            <text x="12" [attr.y]="24 + $index * 17" class="name" [attr.clip-path]="no.pessoa.simbolo && no.pessoa.simbolo !== 'neutro' ? 'url(#limite-nome-simbolo)' : 'url(#limite-nome)'">{{ linha }}</text>
           }
           <text x="12" y="64" class="detail">{{ no.pessoa.nascimento ? 'Nasc. ' + no.pessoa.nascimento.split('-').reverse().join('/') : 'Nascimento não informado' }}</text>
           <text x="12" y="84" class="detail">{{ no.pessoa.falecida ? '† Pessoa falecida' : 'Pessoa' }} · {{ no.pessoa.id.slice(0, 8) }}</text>
@@ -49,9 +67,12 @@
 }
 <div class="legend" aria-label="Legenda do genograma">
   <span><i class="card-symbol" aria-hidden="true"></i> Pessoa</span>
+  <span><b aria-hidden="true">□ ○ ◇</b> Símbolo escolhido no cadastro</span>
   <span><i class="line-symbol" aria-hidden="true">→</i> Filiação: responsável → descendente</span>
   <span><i class="union-symbol" aria-hidden="true"></i> União</span>
-  <span><b aria-hidden="true">†</b> Pessoa falecida</span>
+  <span><b aria-hidden="true">/</b> Separação</span>
+  <span><b aria-hidden="true">//</b> Divórcio</span>
+  <span><b aria-hidden="true">† ou ×</b> Pessoa falecida</span>
 </div>
 @if (diagrama().pessoas.length > 0) {
   <details>
@@ -59,7 +80,7 @@
     <h3>Pessoas</h3>
     <ul>
       @for (no of diagrama().pessoas; track no.pessoa.id) {
-        <li>{{ no.pessoa.nome }} · {{ no.pessoa.id.slice(0, 8) }}{{ no.pessoa.falecida ? ' — pessoa falecida' : '' }}{{ no.pessoa.nascimento ? ' — nascimento: ' + no.pessoa.nascimento.split('-').reverse().join('/') : '' }}</li>
+        <li>{{ no.pessoa.nome }} · {{ no.pessoa.id.slice(0, 8) }} — símbolo: {{ rotulosSimbolos[no.pessoa.simbolo ?? 'neutro'] }}{{ no.pessoa.falecida ? ' — pessoa falecida' : '' }}{{ no.pessoa.nascimento ? ' — nascimento: ' + no.pessoa.nascimento.split('-').reverse().join('/') : '' }}</li>
       }
     </ul>
     <h3>Vínculos</h3>
