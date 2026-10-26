@@ -27,6 +27,7 @@ Situação: etapas 01 a 04 implementadas; etapa 06 antecipada e implementada com
 | 08 | Símbolos e situações conjugais | Escolher quadrado, círculo ou losango; representar separação e divórcio; salvar e reabrir mantendo compatibilidade | `feat: amplia simbolos e situacoes conjugais` |
 | 09 | Adoção e acolhimento | Criar e alterar modalidade, distinguir no diagrama e preservar na API com compatibilidade | `feat: adiciona adocao e acolhimento aos vinculos` |
 | 10 | Vínculos emocionais | Proximidade, conflito e afastamento, edição, diagrama e persistência independentes de filiação | `feat: adiciona vinculos emocionais ao genograma` |
+| 11 | Recuperação automática | Restaurar dados, contexto remoto e formulários alterados; tratar falhas e limpar cópias ao salvar ou trocar de genograma | `feat: adiciona recuperacao automatica de rascunhos` |
 
 ## Modelo inicial proposto
 
@@ -253,3 +254,21 @@ Situação: concluída. Vínculos emocionais de proximidade, conflito e afastame
 Validação: `npm.cmd run build` aprovado sem avisos; `npx.cmd tsc -p tsconfig.spec.json --noEmit` aprovado; `npm.cmd test -- --watch=false --browsers=ChromeHeadless` com 58 testes aprovados; `git diff --check` aprovado. Testes cobrem regras, visualização e salvamento/reabertura com HTTP simulado. Interface conferida no Chrome em desktop e viewport de 390 × 844, incluindo edição pela lista, sem alargar a página e sem erros no console. Dados fictícios usados apenas no editor, sem alteração dos registros existentes da API.
 
 Commit sugerido: `feat: adiciona vinculos emocionais ao genograma`.
+
+## Entrega da etapa 11 — 26/10/2026
+
+Situação: concluída. Recuperação automática de rascunhos no navegador.
+
+- Cópia local versionada de título, pessoas, vínculos, contexto remoto e formulários alterados.
+- Restauração automática com validação antes de iniciar a gravação do novo estado.
+- Preservação do identificador remoto e do estado de alterações, evitando POST indevido após recuperar edição de registro existente.
+- Cópia removida após salvar na API, iniciar novo ou abrir outro registro válido. Falhas remotas preservam o rascunho atual.
+- Avisos para armazenamento indisponível, leitura bloqueada, falta de espaço e cópia inválida. Cópia inválida preservada até descarte explícito com confirmação.
+- Captura final ao sair e preservação de formulários de pessoa e vínculo ainda não concluídos.
+- Decisão registrada em [recuperação automática](decisoes/005-recuperacao-automatica.md).
+
+Conferência no Chrome em endereço local separado (`127.0.0.1:4201`), com restauração em nova inicialização de título, duas pessoas, união e ambos os formulários em edição. Layout conferido em desktop e 390 × 844, sem alargar a página e sem erros no console. Os dados fictícios foram descartados nas duas abas de conferência. Nenhum registro da API foi criado ou alterado.
+
+Commit sugerido: `feat: adiciona recuperacao automatica de rascunhos`.
+
+Validação final da etapa 11: `npm.cmd run build` aprovado sem avisos; compilação TypeScript da suíte aprovada; `npm.cmd test -- --watch=false --browsers=ChromeHeadless` com 71 testes aprovados; `git diff --check` aprovado. Os testes incluem recuperação de dados e formulários, contexto remoto, captura ao sair, limpeza após salvar/descartar/trocar documento, falhas de rede, leitura bloqueada, quota e preservação de cópia inválida.

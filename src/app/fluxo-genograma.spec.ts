@@ -1,4 +1,5 @@
-﻿import { provideHttpClient } from '@angular/common/http';
+﻿import { RASCUNHO_STORAGE } from './recuperacao/rascunho.service';
+import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
@@ -10,7 +11,7 @@ describe('Fluxo completo do genograma', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppComponent], providers: [provideHttpClient(), provideHttpClientTesting()]
+      imports: [AppComponent], providers: [provideHttpClient(), provideHttpClientTesting(), { provide: RASCUNHO_STORAGE, useValue: null }]
     }).compileComponents();
     http = TestBed.inject(HttpTestingController);
   });

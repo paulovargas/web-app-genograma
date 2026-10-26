@@ -32,15 +32,21 @@ Escolha **Emocional** para registrar proximidade, conflito ou afastamento entre 
 
 1. Cadastre as pessoas e seus vínculos.
 2. Informe um título e clique em **Salvar genograma**.
-3. Para recuperar após recarregar, selecione o registro em **Genogramas salvos** e clique em **Abrir**.
+3. Para recuperar um registro da API, selecione-o em **Genogramas salvos** e clique em **Abrir**. Se houver rascunho local pendente, ele é restaurado automaticamente ao iniciar.
 4. Alterações posteriores precisam ser salvas novamente. O mesmo registro será atualizado.
 5. **Novo** inicia outro genograma; não exclui os registros da API.
 
-Abrir outro genograma ou iniciar um novo pede confirmação quando há alterações não salvas. Falhas de rede preservam o conteúdo do editor. Não há salvamento automático nem cache offline; alterações não salvas serão perdidas ao recarregar a página.
+Abrir outro genograma ou iniciar um novo pede confirmação quando há alterações não salvas. Falhas de rede preservam o conteúdo do editor. Alterações pendentes são protegidas automaticamente neste navegador, incluindo formulários em edição. O aviso acima do editor informa se a cópia foi protegida ou recuperada, ou se houve falha. O envio à API permanece manual.
 
 Ambiente de protótipo sem autenticação: utilizar apenas dados fictícios. Os registros disponíveis no recurso são compartilhados, sem separação por usuário.
 
 Consulte o [contrato da API e suas limitações](docs/persistencia-api.md).
+
+## Recuperação automática
+
+Ao reabrir o app no mesmo navegador e endereço, um rascunho válido é restaurado automaticamente. A cópia local é removida após salvar na API, iniciar um novo genograma ou abrir outro registro com sucesso. Limpar os dados do navegador também apaga essa cópia; ela não é sincronizada entre dispositivos.
+
+Consulte a [decisão sobre recuperação automática](docs/decisoes/005-recuperacao-automatica.md) para conhecer o funcionamento e os limites.
 
 ## Executar
 

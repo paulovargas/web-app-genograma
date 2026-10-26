@@ -1,7 +1,7 @@
 ﻿<div class="heading"><h2>Pessoas</h2><span>{{ pessoas().length }}</span></div>
 <div class="content">
   <button type="button" class="primary" (click)="novaPessoa()">Adicionar pessoa</button>
-  <p class="storage-note">Use Salvar genograma para guardar suas alterações. Alterações não salvas serão perdidas ao recarregar.</p>
+  <p class="storage-note">Use Salvar genograma para enviar suas alterações à API. A situação da recuperação local aparece acima do editor.</p>
   <p role="status">{{ mensagem() }}</p>
 
   @if (formularioAberto()) {

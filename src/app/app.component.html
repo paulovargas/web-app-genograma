@@ -18,6 +18,7 @@
   </section>
 
   <app-persistencia #persistencia [rascunhoPendente]="cadastro.rascunhoPendente() || vinculos.rascunhoPendente()" (ocupadoChange)="ocupado.set($event)" />
+  <app-recuperacao />
   <fieldset class="editor-controls" [disabled]="ocupado()"><legend class="sr-only">Editor do genograma</legend>
   <div class="workspace">
     <aside class="sidebar" aria-label="Cadastro de pessoas"><app-pessoas #cadastro /></aside>

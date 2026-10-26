@@ -1,4 +1,6 @@
-﻿import { toSignal } from '@angular/core/rxjs-interop';
+﻿import { RascunhoService } from '../recuperacao/rascunho.service';
+import { FormularioPessoaLocal } from '../recuperacao/rascunho-local.model';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { GenogramaService } from '../genograma/genograma.service';
@@ -12,6 +14,8 @@ import { Pessoa, SimboloPessoa } from './pessoa.model';
   styleUrl: './pessoas.component.css'
 })
 export class PessoasComponent {
+  private readonly rascunhoLocal = inject(RascunhoService);
+  private primeiraSessao = true;
   readonly genograma = inject(GenogramaService);
   readonly pessoas = this.genograma.pessoas;
   readonly formularioAberto = signal(false);
@@ -39,7 +43,22 @@ export class PessoasComponent {
       this.cancelar();
       this.exclusaoId.set(null);
       this.mensagem.set('');
+      if (this.primeiraSessao) {
+        this.primeiraSessao = false;
+        const local = this.rascunhoLocal.recuperado?.pessoa;
+        if (local) {
+          this.formulario.reset(local.dados);
+          this.editandoId.set(local.editandoId);
+          this.formularioAberto.set(true);
+          if (local.sujo) this.formulario.markAsDirty();
+        }
+      }
     });
+  }
+
+  capturarRascunho(): FormularioPessoaLocal | null {
+    this.eventosFormulario();
+    return this.formularioAberto() ? { editandoId: this.editandoId(), sujo: this.formulario.dirty, dados: this.formulario.getRawValue() } : null;
   }
 
   novaPessoa(): void {

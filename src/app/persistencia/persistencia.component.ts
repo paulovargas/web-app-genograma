@@ -1,4 +1,5 @@
-﻿import { Component, computed, DestroyRef, HostListener, inject, input, OnInit, output, signal } from '@angular/core';
+﻿import { RascunhoService } from '../recuperacao/rascunho.service';
+import { Component, computed, DestroyRef, HostListener, inject, input, OnInit, output, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
@@ -16,6 +17,7 @@ import { copiarDados, validarGenograma } from './validar-genograma';
 })
 export class PersistenciaComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
+  private readonly rascunhoLocal = inject(RascunhoService);
   private readonly api = inject(GenogramaApiService);
   readonly genograma = inject(GenogramaService);
   readonly rascunhoPendente = input(false);
@@ -36,9 +38,19 @@ export class PersistenciaComponent implements OnInit {
   readonly alterado = computed(() => this.assinatura() !== this.ultimaVersaoSalva());
 
   ngOnInit(): void {
-    this.ultimaVersaoSalva.set(this.assinatura());
+    const local = this.rascunhoLocal.recuperado;
+    if (local) {
+      this.titulo.setValue(local.titulo);
+      this.tituloAtual.set(local.titulo);
+      this.idAtual.set(local.idRemoto);
+    }
+    this.ultimaVersaoSalva.set(local?.ultimaVersaoSalva ?? this.assinatura());
     this.titulo.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(titulo => this.tituloAtual.set(titulo));
     this.listar();
+  }
+
+  contextoLocal(): { titulo: string; idRemoto: string | null; ultimaVersaoSalva: string } {
+    return { titulo: this.tituloAtual(), idRemoto: this.idAtual(), ultimaVersaoSalva: this.ultimaVersaoSalva() };
   }
 
   @HostListener('window:beforeunload', ['$event'])
@@ -81,6 +93,7 @@ export class PersistenciaComponent implements OnInit {
           const salvo = validarGenograma(resposta);
           this.idAtual.set(salvo.id);
           this.ultimaVersaoSalva.set(JSON.stringify(dados));
+          this.rascunhoLocal.restaurado.set(false);
           this.mensagem.set('Genograma salvo na API.');
           this.listar();
         } catch {
@@ -110,6 +123,7 @@ export class PersistenciaComponent implements OnInit {
       this.idAtual.set(null);
       this.ultimaVersaoSalva.set(this.assinatura());
       this.erro.set('');
+      this.rascunhoLocal.restaurado.set(false);
       this.mensagem.set('Novo genograma iniciado.');
       return;
     }
@@ -122,6 +136,7 @@ export class PersistenciaComponent implements OnInit {
           this.titulo.setValue(salvo.titulo);
           this.idAtual.set(salvo.id);
           this.ultimaVersaoSalva.set(this.assinatura());
+          this.rascunhoLocal.restaurado.set(false);
           this.mensagem.set('Genograma carregado.');
         } catch (erro) {
           this.erro.set(erro instanceof Error ? erro.message : 'Dados inválidos.');

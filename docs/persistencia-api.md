@@ -34,7 +34,7 @@ A API gera o `id` do genograma e retorna o objeto completo. Os identificadores i
 
 ## Comportamento
 
-A lista é consultada na abertura da aplicação. O editor começa vazio e o usuário escolhe qual registro abrir. Salvar cria um registro quando ainda não há identificador ativo; depois atualiza o mesmo registro. Novo inicia outro documento sem apagar dados remotos.
+A lista é consultada na abertura da aplicação. Se houver rascunho local válido, o editor é restaurado automaticamente; caso contrário, começa vazio e o usuário escolhe qual registro abrir. Salvar cria um registro quando ainda não há identificador ativo; depois atualiza o mesmo registro. Novo inicia outro documento sem apagar dados remotos.
 
 O conteúdo completo é enviado a cada salvamento. A interface impede envios simultâneos e bloqueia o editor durante salvar/abrir. Os dados recebidos são validados antes de substituir o estado atual; registros inválidos não devem apagar o trabalho no editor.
 
@@ -42,10 +42,10 @@ As requisições têm limite de espera de 15 segundos. Não há repetição auto
 
 ## Limitações
 
-- Sem autenticação, isolamento por usuário, cache offline ou salvamento automático.
+- Sem autenticação ou isolamento por usuário. Salvamento na API manual; recuperação local automática disponível a partir da etapa 11.
 - Sem controle de versões: duas sessões editando o mesmo registro podem sobrescrever alterações.
 - Sem exclusão de genogramas remotos pela interface nesta etapa.
-- Dados não salvos são perdidos ao recarregar ou fechar a página.
+- Dados pendentes são recuperados pela cópia local quando ela está disponível; a cópia depende do navegador, perfil e endereço. Não há sincronização de rascunhos ou garantia de carregamento offline.
 - Usar apenas dados fictícios no protótipo.
 
 ## Verificações realizadas
@@ -78,3 +78,9 @@ Os campos opcionais são preservados ao salvar e reabrir; não há alteração n
 ```
 
 A API continua recebendo o genograma completo. Relações emocionais são preservadas ao salvar e reabrir; os registros antigos seguem compatíveis sem alteração automática.
+
+## Recuperação local e API
+
+A cópia local possui formato próprio e versionado, separado do contrato enviado à API. Ela guarda `idRemoto` e a referência da última versão salva, além dos dados e dos formulários alterados. Assim, recuperar uma edição de registro existente mantém o uso de PUT, sem criar uma duplicata por POST.
+
+Nenhuma gravação remota é feita apenas por recuperar o rascunho. O envio continua dependendo de **Salvar genograma**. Consulte a [decisão 005](decisoes/005-recuperacao-automatica.md).

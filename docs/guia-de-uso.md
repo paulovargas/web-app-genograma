@@ -12,7 +12,7 @@ Salvar uma pessoa ou adicionar um vínculo atualiza o editor. Para gravar essas 
 
 ## Reabrir e continuar
 
-Após recarregar a página, escolha o registro em **Genogramas salvos** e clique em **Abrir**. Pessoas, vínculos, título e diagrama serão recuperados. Os próximos salvamentos atualizarão esse registro.
+Ao reabrir no mesmo navegador e endereço, o rascunho local pendente é restaurado automaticamente. Para abrir um registro da API, escolha-o em **Genogramas salvos** e clique em **Abrir**. Pessoas, vínculos, título e diagrama serão recuperados. Os próximos salvamentos atualizarão esse registro.
 
 **Novo** começa outro genograma sem excluir registros da API. Abrir outro registro ou iniciar um novo pede confirmação quando houver alterações ou formulários pendentes.
 
@@ -32,14 +32,14 @@ Use **Editar** na lista de pessoas e confirme em **Salvar**. A alteração apare
 
 ## Evitar perda de alterações
 
-O salvamento é manual. O indicador informa se há alterações ou formulários pendentes. Ao tentar fechar ou atualizar a página com trabalho pendente, o aplicativo solicita o aviso nativo do navegador. A exibição desse aviso depende das regras do navegador e não substitui o salvamento.
+O salvamento na API é manual; a cópia de recuperação neste navegador é automática. O indicador informa se há alterações ou formulários pendentes. Ao tentar fechar ou atualizar a página com trabalho pendente, o aplicativo solicita o aviso nativo do navegador. A exibição desse aviso depende das regras do navegador e não substitui o salvamento.
 
 Erros de carregamento preservam o editor atual. Se a confirmação de salvamento falhar, confira a lista antes de repetir: a API pode ter recebido a gravação mesmo sem a resposta chegar ao navegador.
 
 ## Limitações desta versão
 
 - MockAPI compartilhada, sem autenticação ou separação por usuário: usar apenas dados fictícios.
-- Sem cache offline, salvamento automático, histórico ou resolução de edições simultâneas.
+- Salvamento na API manual; recuperação local sem histórico, sincronização entre dispositivos ou resolução de edições simultâneas. A aplicação não possui garantia de carregamento offline.
 - Sem exportação, arraste dos cartões ou exclusão de genogramas remotos pela interface.
 - Layout neutro com legenda própria, sem convenção clínica completa. Famílias extensas podem ter conexões sobrepostas.
 
@@ -81,3 +81,13 @@ O acolhimento é apresentado como vínculo de cuidado. Vínculos antigos continu
 6. Clique em **Salvar genograma** para persistir as alterações.
 
 Esses vínculos podem coexistir com união, filiação, adoção ou acolhimento. Não alteram as gerações e não têm direção nesta versão. A legenda diferencia os padrões; a descrição textual informa as relações por extenso. É permitida uma relação emocional atual por par de pessoas. Veja a [decisão 004](decisoes/004-vinculos-emocionais.md).
+
+## Recuperação automática (etapa 11)
+
+Os dados do editor e os valores dos formulários alterados são copiados automaticamente para este navegador. Quando a cópia é atualizada, aparece **Alterações protegidas neste navegador**. Ao reabrir o app no mesmo endereço, título, pessoas, vínculos e formulários pendentes são restaurados, com o aviso **Rascunho recuperado**.
+
+Conclua ou cancele os formulários e use **Salvar genograma** para enviar à API. Se a edição recuperada pertence a um registro existente, o salvamento atualiza esse mesmo registro. A cópia local é removida depois da confirmação da API.
+
+Novo e abertura válida de outro registro descartam a cópia anterior após a confirmação. Falhas de rede mantêm o rascunho. Se o armazenamento local falhar, siga o aviso e salve na API. Uma cópia inválida é preservada e só é removida pela ação de descarte local, com confirmação.
+
+Use o mesmo navegador, perfil e endereço. A cópia não acompanha outro dispositivo ou endereço e pode ser apagada ao limpar os dados do navegador. Evite editar em múltiplas abas simultaneamente: a cópia local não possui histórico nem mesclagem. Dados já perdidos antes da existência de uma cópia não podem ser recuperados por esta funcionalidade.

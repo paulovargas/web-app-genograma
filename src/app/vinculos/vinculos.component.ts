@@ -1,4 +1,6 @@
-﻿import { toSignal } from '@angular/core/rxjs-interop';
+﻿import { RascunhoService } from '../recuperacao/rascunho.service';
+import { FormularioVinculoLocal } from '../recuperacao/rascunho-local.model';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { GenogramaService } from '../genograma/genograma.service';
@@ -12,6 +14,8 @@ import { RelacaoEmocional, ROTULOS_EMOCIONAIS, ModalidadeFiliacao, ROTULOS_FILIA
   styleUrl: './vinculos.component.css'
 })
 export class VinculosComponent {
+  private readonly rascunhoLocal = inject(RascunhoService);
+  private primeiraSessao = true;
   readonly genograma = inject(GenogramaService);
   readonly erro = signal('');
   readonly mensagem = signal('');
@@ -44,7 +48,20 @@ export class VinculosComponent {
       this.exclusaoId.set(null);
       this.erro.set('');
       this.mensagem.set('');
+      if (this.primeiraSessao) {
+        this.primeiraSessao = false;
+        const local = this.rascunhoLocal.recuperado?.vinculo;
+        if (local) {
+          this.formulario.reset(local.dados);
+          if (local.sujo) this.formulario.markAsDirty();
+        }
+      }
     });
+  }
+
+  capturarRascunho(): FormularioVinculoLocal {
+    this.eventosFormulario();
+    return { sujo: this.formulario.dirty, dados: this.formulario.getRawValue() };
   }
 
   salvar(): void {
