@@ -28,7 +28,7 @@
         <div><h2 id="editor-title">{{ persistencia.tituloAtual() }}</h2></div>
         <span class="canvas-label">Área de construção</span>
       </div>
-      <app-diagrama />
+      <app-diagrama [titulo]="persistencia.tituloAtual()" [rascunhoPendente]="cadastro.rascunhoPendente() || vinculos.rascunhoPendente()" />
     </section>
   </div>
 

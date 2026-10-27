@@ -85,3 +85,9 @@ O app avisa quando há formulários pendentes e solicita confirmação ao sair c
 ## Desenvolvimento por etapas
 
 Consulte o [roteiro](docs/roteiro.md) para escopo proposto, critérios de conclusão e padrão de commits.
+
+## Imprimir ou salvar em PDF (etapa 13)
+
+No diagrama, clique em **Imprimir / Salvar PDF** e escolha **Salvar como PDF** na janela do navegador. O app prepara A4 em paisagem, com título, diagrama completo e legenda; botões e formulários ficam ocultos. Conclua ou cancele os formulários pendentes antes de exportar.
+
+O ajuste ignora o zoom da tela. Genogramas extensos podem ficar pequenos em uma página. Confira a prévia e mantenha A4 em paisagem, escala padrão e cabeçalhos/rodapés do navegador desativados. O PDF é para apresentação; use JSON para reabrir e editar. Imprimir não salva na API nem altera o rascunho.

@@ -7,6 +7,11 @@
     <span class="empty-note">Nenhuma pessoa adicionada</span>
   </div>
 } @else {
+  <div class="print-controls">
+    <button type="button" (click)="imprimir()">Imprimir / Salvar PDF</button>
+    <p>Escolha Salvar como PDF na impressão. Formato A4 em paisagem; famílias extensas podem ficar pequenas.</p>
+    @if (erroImpressao()) { <p role="alert">{{ erroImpressao() }}</p> }
+  </div>
   <div class="tools" aria-label="Controles do diagrama">
     <span>{{ diagrama().pessoas.length }} pessoa(s) · {{ diagrama().conexoes.length }} vínculo(s)</span>
     <div>

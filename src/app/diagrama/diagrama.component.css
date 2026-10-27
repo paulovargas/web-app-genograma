@@ -24,3 +24,7 @@ details { padding: 12px 16px; border-top: 1px solid #e6ebe7; font-size: 12px; } 
 .adoption-symbol { width: 22px; border-top: 2px dashed #326e58; } .foster-symbol { width: 22px; border-top: 2px dotted #326e58; }
 .emotional { stroke: #286a9b; } .conflict { stroke: #a44138; } .distant { stroke: #66717c; stroke-dasharray: 2 7; }
 .conflict-mark rect { fill: #fcfdfb; } .conflict-mark path { fill: none; stroke: #a44138; stroke-width: 2; }
+.print-controls { padding: 12px 16px; }
+.print-controls button { padding: 8px 12px; border: 1px solid #326e58; border-radius: 6px; background: white; color: #205c4e; cursor: pointer; }
+.print-controls p { margin: 8px 0 0; font-size: 12px; line-height: 1.5; }
+.print-controls [role="alert"] { color: #a44138; }

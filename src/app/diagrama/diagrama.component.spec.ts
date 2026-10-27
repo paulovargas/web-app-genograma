@@ -3,6 +3,26 @@ import { GenogramaService } from '../genograma/genograma.service';
 import { DiagramaComponent } from './diagrama.component';
 
 describe('DiagramaComponent', () => {
+  it('deve bloquear impressão incompleta e imprimir sem alterar o genograma ou zoom', () => {
+    const fixture = TestBed.createComponent(DiagramaComponent);
+    const imprimir = spyOn(window, 'print');
+    const service = TestBed.inject(GenogramaService);
+    fixture.componentInstance.imprimir();
+    expect(imprimir).not.toHaveBeenCalled();
+    service.salvarPessoa({ id: 'pdf-a', nome: 'Exemplo', nascimento: '', falecida: false });
+    fixture.componentRef.setInput('titulo', 'Família exemplo');
+    fixture.componentRef.setInput('rascunhoPendente', true);
+    fixture.componentInstance.imprimir();
+    expect(imprimir).not.toHaveBeenCalled();
+    expect(fixture.componentInstance.erroImpressao()).toContain('formulários');
+    fixture.componentRef.setInput('rascunhoPendente', false);
+    fixture.componentInstance.zoom.set(150);
+    fixture.componentInstance.imprimir();
+    expect(imprimir).toHaveBeenCalledTimes(1);
+    expect(fixture.componentInstance.erroImpressao()).toBe('');
+    expect(fixture.componentInstance.zoom()).toBe(150);
+    expect(service.pessoas().length).toBe(1);
+  });
   beforeEach(async () => {
     await TestBed.configureTestingModule({ imports: [DiagramaComponent] }).compileComponents();
   });

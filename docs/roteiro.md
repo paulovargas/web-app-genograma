@@ -30,6 +30,8 @@ Situação: etapas 01 a 04 implementadas; etapa 06 antecipada e implementada com
 | 11 | Recuperação automática | Restaurar dados, contexto remoto e formulários alterados; tratar falhas e limpar cópias ao salvar ou trocar de genograma | `feat: adiciona recuperacao automatica de rascunhos` |
 | 12 | Backup JSON | Exportar dados completos; validar arquivo, conferir e importar como cópia independente | `feat: adiciona exportacao e importacao de genogramas em json` |
 
+| 13 | Impressão e PDF | Título, SVG e legenda em A4 paisagem, sem controles, com proteção dos formulários | `feat: adiciona impressao e exportacao pdf do genograma` |
+
 ## Modelo inicial proposto
 
 - Genograma: identificador, título, pessoas e vínculos.
@@ -288,3 +290,11 @@ Situação: concluída. Exportação e importação de backups JSON versionados.
 Validação: build aprovado sem avisos, compilação TypeScript da suíte aprovada e 82 testes aprovados em ChromeHeadless. Testes incluem ida e volta dos dados, arquivos inválidos, limite de tamanho, erro de leitura, cancelamento, formulários pendentes, importação sem sobrescrever o registro remoto e recuperação local. A conferência manual da seleção de arquivo ficou limitada pelo bloqueio de acesso a arquivos da extensão do Chrome; permissões não foram alteradas. Nenhum registro remoto foi criado ou alterado na conferência.
 
 Commit sugerido: `feat: adiciona exportacao e importacao de genogramas em json`.
+
+## Entrega da etapa 13 — 27/10/2026
+
+Impressão e salvamento em PDF pela janela nativa do navegador. Saída A4 em paisagem com título, diagrama completo e legenda; controles e formulários ocultos. Zoom do editor preservado, sem gravação na API. Formulários pendentes bloqueiam a ação. Decisão registrada em [impressão e PDF](decisoes/007-impressao-pdf.md).
+
+Validação: build aprovado sem avisos e 83 testes aprovados em ChromeHeadless; teste do bloqueio de dados incompletos e formulários pendentes e da impressão sem alterar dados ou zoom. A prévia nativa e a gravação de um PDF ainda precisam de conferência manual no navegador do usuário.
+
+Commit sugerido: `feat: adiciona impressao e exportacao pdf do genograma`.

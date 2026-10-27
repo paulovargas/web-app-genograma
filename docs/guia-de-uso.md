@@ -103,3 +103,9 @@ Use o mesmo navegador, perfil e endereço. A cópia não acompanha outro disposi
 6. A cópia importada fica protegida pela recuperação local. Clique em **Salvar genograma** para criar um registro novo na API.
 
 O arquivo inclui símbolos, situações conjugais, modalidades e relações emocionais. Não inclui identificador da API, formulários em edição ou zoom. Arquivos inválidos, versões desconhecidas e vínculos inconsistentes são rejeitados antes de substituir o editor. Não há mesclagem com o genograma aberto. JSON bruto da API e o formato interno do rascunho não são backups importáveis.
+
+## Imprimir ou salvar em PDF (etapa 13)
+
+No diagrama, clique em **Imprimir / Salvar PDF** e escolha **Salvar como PDF** na janela do navegador. O app prepara A4 em paisagem, com título, diagrama completo e legenda; botões e formulários ficam ocultos. Conclua ou cancele os formulários pendentes antes de exportar.
+
+O ajuste ignora o zoom da tela. Genogramas extensos podem ficar pequenos em uma página. Confira a prévia e mantenha A4 em paisagem, escala padrão e cabeçalhos/rodapés do navegador desativados. O PDF é para apresentação; use JSON para reabrir e editar. Imprimir não salva na API nem altera o rascunho.

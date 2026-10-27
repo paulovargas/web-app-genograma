@@ -4,3 +4,39 @@ a:focus-visible, [tabindex]:focus-visible { outline: 3px solid #307d67; outline-
 
 .editor-controls { border: 0; padding: 0; margin: 0; min-width: 0; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+
+@page { size: A4 landscape; margin: 10mm; }
+@media print {
+  html, body { margin: 0; background: white; color: #172b22; }
+  app-root > .skip-link, .app-header, .page-heading, app-persistencia,
+  app-recuperacao, .sidebar, app-vinculos, .guide, footer,
+  .canvas-label, app-diagrama .tools, app-diagrama .print-controls,
+  app-diagrama .help, app-diagrama details { display: none !important; }
+  app-root main { max-width: none; padding: 0; margin: 0; }
+  app-root .workspace { display: block; border: 0; border-radius: 0; overflow: visible; min-height: 0; }
+  app-root .editor { display: block; }
+  app-root .editor-toolbar { padding: 0 0 4mm; border: 0; }
+  app-root .editor-toolbar h2 { font-size: 16pt; overflow-wrap: anywhere; }
+  app-diagrama .viewport { overflow: visible; max-height: none; border: 0; background: white; }
+  app-diagrama svg { display: block; width: 100% !important; height: 140mm !important; }
+  app-diagrama .legend { padding: 3mm 0 0; gap: 2mm 4mm; font-size: 8pt; break-inside: avoid; }
+  app-diagrama { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+}
+
+@page { size: A4 landscape; margin: 10mm; }
+@media print {
+  html, body { margin: 0; background: white; color: #172b22; }
+  app-root > .skip-link, .app-header, .page-heading, app-persistencia,
+  app-recuperacao, .sidebar, app-vinculos, .guide, footer,
+  .canvas-label, app-diagrama .tools, app-diagrama .print-controls,
+  app-diagrama .help, app-diagrama details { display: none !important; }
+  app-root main { max-width: none; padding: 0; margin: 0; }
+  app-root .workspace { display: block; border: 0; border-radius: 0; overflow: visible; min-height: 0; }
+  app-root .editor { display: block; }
+  app-root .editor-toolbar { padding: 0 0 4mm; border: 0; }
+  app-root .editor-toolbar h2 { font-size: 16pt; overflow-wrap: anywhere; }
+  app-diagrama .viewport { overflow: visible; max-height: none; border: 0; background: white; }
+  app-diagrama svg { display: block; width: 100% !important; height: 140mm !important; }
+  app-diagrama .legend { padding: 3mm 0 0; gap: 2mm 4mm; font-size: 8pt; break-inside: avoid; }
+  app-diagrama { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+}
