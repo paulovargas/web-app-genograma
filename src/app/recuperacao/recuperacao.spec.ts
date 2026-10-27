@@ -1,4 +1,5 @@
-﻿import { ComponentFixture, TestBed } from '@angular/core/testing';
+﻿import { criarBackupJson } from '../persistencia/backup-json';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
@@ -132,5 +133,21 @@ describe('Recuperação do editor', () => {
     expect(TestBed.inject(GenogramaService).pessoas()).toEqual([]);
     expect(fixture.nativeElement.textContent).toContain('A cópia local não pôde ser recuperada');
     expect(fixture.nativeElement.querySelector('app-pessoas button').disabled).toBeFalse();
+  });
+  it('deve proteger a cópia importada localmente sem manter a identidade remota anterior', async () => {
+    dados.set(RASCUNHO_CHAVE, JSON.stringify(rascunhoExemplo()));
+    await iniciar();
+    const persistencia = fixture.debugElement.query(By.directive(PersistenciaComponent)).componentInstance as PersistenciaComponent;
+    const conteudo = { titulo: 'Importado', pessoas: [], vinculos: [] };
+    await persistencia.importarArquivo(new File([criarBackupJson(conteudo)], 'backup.json'));
+    persistencia.confirmar();
+    fixture.detectChanges(); await fixture.whenStable();
+    const local = JSON.parse(dados.get(RASCUNHO_CHAVE)!);
+    expect(local.titulo).toBe('Importado');
+    expect(local.idRemoto).toBeNull();
+    expect(local.pessoa).toBeNull();
+    expect(local.vinculo.sujo).toBeFalse();
+    expect(TestBed.inject(GenogramaService).pessoas()).toEqual([]);
+    http.expectNone(request => request.method === 'POST' || request.method === 'PUT');
   });
 });

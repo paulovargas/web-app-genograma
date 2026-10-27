@@ -5,3 +5,5 @@ label { flex: 1 1 240px; font-size: 12px; } input, select { display: block; widt
 input, select, button { font: inherit; font-size: 13px; } button { padding: 10px 14px; border: 1px solid #a8bbae; border-radius: 6px; background: #edf3ed; color: #274e3d; cursor: pointer; }
 button:disabled { opacity: .55; cursor: wait; } button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid #307d67; outline-offset: 2px; }
 p { font-size: 12px; line-height: 1.7; color: #607267; } p:empty { display: none; } .error { color: #a32929; } .note { margin-bottom: 0; } .confirmation { padding: 14px; background: #f4f7f2; margin-top: 16px; border-radius: 8px; } .confirmation button { margin-right: 8px; }
+.backup-controls { border: 1px solid #dce4df; border-radius: 8px; padding: 14px; margin: 18px 0; min-width: 0; }
+.backup-controls legend { font-size: 13px; color: #274e3d; } input[type=file] { overflow: hidden; } .confirmation p { overflow-wrap: anywhere; }

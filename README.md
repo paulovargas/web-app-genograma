@@ -1,4 +1,4 @@
-﻿# App de Genograma
+# App de Genograma
 
 Aplicação Angular para construir e visualizar pessoas e vínculos familiares em um genograma.
 
@@ -47,6 +47,14 @@ Consulte o [contrato da API e suas limitações](docs/persistencia-api.md).
 Ao reabrir o app no mesmo navegador e endereço, um rascunho válido é restaurado automaticamente. A cópia local é removida após salvar na API, iniciar um novo genograma ou abrir outro registro com sucesso. Limpar os dados do navegador também apaga essa cópia; ela não é sincronizada entre dispositivos.
 
 Consulte a [decisão sobre recuperação automática](docs/decisoes/005-recuperacao-automatica.md) para conhecer o funcionamento e os limites.
+
+## Backup em JSON
+
+Em **Backup em arquivo**, use **Exportar JSON** para baixar uma cópia do título, pessoas e vínculos. Conclua ou cancele os formulários pendentes antes de exportar.
+
+Para restaurar, escolha o arquivo em **Importar JSON**, confira o título e as quantidades e confirme **Importar como novo genograma**. Cancelar mantém o editor atual. A importação cria uma cópia independente; use **Salvar genograma** para enviá-la à API como um novo registro.
+
+O limite é de 5 MiB por arquivo. O backup não inclui formulários pendentes nem o identificador remoto. Consulte a [decisão sobre backup JSON](docs/decisoes/006-backup-json.md).
 
 ## Executar
 

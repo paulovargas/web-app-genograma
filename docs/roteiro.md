@@ -1,4 +1,4 @@
-﻿# Roteiro do app de genograma
+# Roteiro do app de genograma
 
 ## Objetivo e escopo proposto
 
@@ -28,6 +28,7 @@ Situação: etapas 01 a 04 implementadas; etapa 06 antecipada e implementada com
 | 09 | Adoção e acolhimento | Criar e alterar modalidade, distinguir no diagrama e preservar na API com compatibilidade | `feat: adiciona adocao e acolhimento aos vinculos` |
 | 10 | Vínculos emocionais | Proximidade, conflito e afastamento, edição, diagrama e persistência independentes de filiação | `feat: adiciona vinculos emocionais ao genograma` |
 | 11 | Recuperação automática | Restaurar dados, contexto remoto e formulários alterados; tratar falhas e limpar cópias ao salvar ou trocar de genograma | `feat: adiciona recuperacao automatica de rascunhos` |
+| 12 | Backup JSON | Exportar dados completos; validar arquivo, conferir e importar como cópia independente | `feat: adiciona exportacao e importacao de genogramas em json` |
 
 ## Modelo inicial proposto
 
@@ -272,3 +273,18 @@ Conferência no Chrome em endereço local separado (`127.0.0.1:4201`), com resta
 Commit sugerido: `feat: adiciona recuperacao automatica de rascunhos`.
 
 Validação final da etapa 11: `npm.cmd run build` aprovado sem avisos; compilação TypeScript da suíte aprovada; `npm.cmd test -- --watch=false --browsers=ChromeHeadless` com 71 testes aprovados; `git diff --check` aprovado. Os testes incluem recuperação de dados e formulários, contexto remoto, captura ao sair, limpeza após salvar/descartar/trocar documento, falhas de rede, leitura bloqueada, quota e preservação de cópia inválida.
+
+
+## Entrega da etapa 12 — 27/10/2026
+
+Situação: concluída. Exportação e importação de backups JSON versionados.
+
+- Download com nome derivado do título e limite de 5 MiB; formulários pendentes bloqueiam a exportação.
+- Validação de formato, versão, pessoas, vínculos, referências, duplicatas e ciclos antes de alterar o editor.
+- Prévia com título e quantidades, confirmação de substituição e cancelamento sem perda do conteúdo atual.
+- Importação como novo genograma, sem identidade remota e sem envio automático à API; recuperação local protege a cópia aplicada.
+- Decisão registrada em [backup JSON](decisoes/006-backup-json.md).
+
+Validação: build aprovado sem avisos, compilação TypeScript da suíte aprovada e 82 testes aprovados em ChromeHeadless. Testes incluem ida e volta dos dados, arquivos inválidos, limite de tamanho, erro de leitura, cancelamento, formulários pendentes, importação sem sobrescrever o registro remoto e recuperação local. A conferência manual da seleção de arquivo ficou limitada pelo bloqueio de acesso a arquivos da extensão do Chrome; permissões não foram alteradas. Nenhum registro remoto foi criado ou alterado na conferência.
+
+Commit sugerido: `feat: adiciona exportacao e importacao de genogramas em json`.

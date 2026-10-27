@@ -1,4 +1,4 @@
-﻿# Guia do primeiro fluxo do genograma
+# Guia do primeiro fluxo do genograma
 
 ## Criar e salvar
 
@@ -91,3 +91,15 @@ Conclua ou cancele os formulários e use **Salvar genograma** para enviar à API
 Novo e abertura válida de outro registro descartam a cópia anterior após a confirmação. Falhas de rede mantêm o rascunho. Se o armazenamento local falhar, siga o aviso e salve na API. Uma cópia inválida é preservada e só é removida pela ação de descarte local, com confirmação.
 
 Use o mesmo navegador, perfil e endereço. A cópia não acompanha outro dispositivo ou endereço e pode ser apagada ao limpar os dados do navegador. Evite editar em múltiplas abas simultaneamente: a cópia local não possui histórico nem mesclagem. Dados já perdidos antes da existência de uma cópia não podem ser recuperados por esta funcionalidade.
+
+
+## Backup em arquivo (etapa 12)
+
+1. Conclua ou cancele os formulários de pessoa e vínculo e informe um título.
+2. Em **Backup em arquivo**, clique em **Exportar JSON** e guarde o arquivo baixado. Isso não salva na API nem remove o rascunho local.
+3. Para recuperar uma cópia, selecione um arquivo exportado pelo app em **Importar JSON**. O limite é de 5 MiB.
+4. Confira nome do arquivo, título, quantidade de pessoas e vínculos. **Cancelar** mantém o editor atual.
+5. Confirme **Importar como novo genograma**. Essa ação substitui o editor e descarta formulários pendentes; o aviso informa quando há alterações não salvas.
+6. A cópia importada fica protegida pela recuperação local. Clique em **Salvar genograma** para criar um registro novo na API.
+
+O arquivo inclui símbolos, situações conjugais, modalidades e relações emocionais. Não inclui identificador da API, formulários em edição ou zoom. Arquivos inválidos, versões desconhecidas e vínculos inconsistentes são rejeitados antes de substituir o editor. Não há mesclagem com o genograma aberto. JSON bruto da API e o formato interno do rascunho não são backups importáveis.

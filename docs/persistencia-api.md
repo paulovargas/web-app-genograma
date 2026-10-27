@@ -1,4 +1,4 @@
-﻿# Persistência de genogramas pela API
+# Persistência de genogramas pela API
 
 ## Endereço e configuração
 
@@ -84,3 +84,10 @@ A API continua recebendo o genograma completo. Relações emocionais são preser
 A cópia local possui formato próprio e versionado, separado do contrato enviado à API. Ela guarda `idRemoto` e a referência da última versão salva, além dos dados e dos formulários alterados. Assim, recuperar uma edição de registro existente mantém o uso de PUT, sem criar uma duplicata por POST.
 
 Nenhuma gravação remota é feita apenas por recuperar o rascunho. O envio continua dependendo de **Salvar genograma**. Consulte a [decisão 005](decisoes/005-recuperacao-automatica.md).
+
+
+## Backup JSON e identidade remota
+
+O backup portátil usa um envelope próprio, com `formato: genograma`, `versao: 1`, `exportadoEm` e `genograma`. Ele transporta apenas título, pessoas e vínculos. Diferentemente da recuperação local, não transporta `idRemoto` nem a referência da última versão salva.
+
+Importar não faz POST ou PUT. Após confirmação, a cópia fica sem identidade remota e o próximo salvamento manual usa POST. O registro de origem permanece intacto. Consulte a [decisão 006](decisoes/006-backup-json.md).
