@@ -91,3 +91,19 @@ Consulte o [roteiro](docs/roteiro.md) para escopo proposto, critérios de conclu
 No diagrama, clique em **Imprimir / Salvar PDF** e escolha **Salvar como PDF** na janela do navegador. O app prepara A4 em paisagem, com título, diagrama completo e legenda; botões e formulários ficam ocultos. Conclua ou cancele os formulários pendentes antes de exportar.
 
 O ajuste ignora o zoom da tela. Genogramas extensos podem ficar pequenos em uma página. Confira a prévia e mantenha A4 em paisagem, escala padrão e cabeçalhos/rodapés do navegador desativados. O PDF é para apresentação; use JSON para reabrir e editar. Imprimir não salva na API nem altera o rascunho.
+## Publicar no GitHub Pages
+
+Execute `npm.cmd run build:pages`. O build de produção usa a base `/web-app-genograma/` e gera os arquivos publicáveis em `dist/web-app-genograma/browser/`.
+
+Foi incluído o workflow manual `.github/workflows/pages.yml`:
+
+1. Envie as alterações para a branch padrão do repositório no GitHub.
+2. Em **Settings > Pages > Build and deployment > Source**, escolha **GitHub Actions**.
+3. Em **Actions > Publicar no GitHub Pages**, clique em **Run workflow** na branch padrão.
+4. Depois do sucesso, acesse `https://paulovargas.github.io/web-app-genograma/`.
+
+O workflow instala as dependências com `npm ci`, gera o build e publica somente a pasta `browser`. Não é necessário versionar `dist`. A publicação não foi executada nesta preparação. Se o nome do repositório ou o domínio mudar, ajuste a base em `build:pages`.
+
+O rascunho local do endereço de desenvolvimento não acompanha o endereço do Pages. Para transferir conteúdo, exporte JSON no endereço antigo e importe no publicado, ou abra um registro salvo na API. A API de protótipo continua compartilhada e sem autenticação; use dados fictícios.
+
+Referência: https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages
